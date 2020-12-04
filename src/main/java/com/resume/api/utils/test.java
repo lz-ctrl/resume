@@ -42,8 +42,9 @@ public class test {
             stringHtml.append("</body></html>");
             //将HTML文件内容写入文件中
             printStream.println(stringHtml.toString());
-
-
+            /**
+             * 这里把HTML转成PDF
+             */
             // step 1
             Document document = new Document();
             // step 2

@@ -1,5 +1,7 @@
 package com.resume.api.service;
 
+import org.springframework.stereotype.Service;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintStream;
@@ -10,6 +12,7 @@ import java.io.PrintStream;
  * 根据简历的id用来生成html模板
  * Html用来转成PDF
  */
+@Service
 public class HtmlService {
 
 

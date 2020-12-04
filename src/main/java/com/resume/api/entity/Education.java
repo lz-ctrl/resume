@@ -15,19 +15,17 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("tb_user")
-public class User {
+@TableName("tb_education")
+public class Education {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    private String phone;
-    private String password;
-    private String openId;
-    private String unionId;
-    private String realName;
-    private Date birthdayTime;
-    private Integer gender;
-    private String wxNum;
-    private String email;
+    private String schoolName;
+    private Integer studyLevelId;
+    private String major;
+    private Date schoolStartTime;
+    private Date schoolEndTime;
+    private Integer userId;
+    private Integer resumeId;
     private Date createTime;
 }

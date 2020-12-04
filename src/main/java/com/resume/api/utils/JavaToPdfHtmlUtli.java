@@ -19,8 +19,9 @@ public class JavaToPdfHtmlUtli {
 
 
     private static final String DEST = "E:\\HelloWorld_CN_HTML.pdf";
-    private static final String HTML = "E:\\indext.html";
+    private static final String HTML = "E:\\1204113159702.html";
     private static final String FONT = "E:\\simhei.ttf";
+    private static final String FONT2 = "E:\\Microsoft YaHei UI Bold.ttf";
 
 
     public static void main(String[] args) throws IOException, DocumentException {
@@ -33,6 +34,7 @@ public class JavaToPdfHtmlUtli {
         // step 4
         XMLWorkerFontProvider fontImp = new XMLWorkerFontProvider(XMLWorkerFontProvider.DONTLOOKFORFONTS);
         fontImp.register(FONT);
+        fontImp.register(FONT2);
         XMLWorkerHelper.getInstance().parseXHtml(writer, document,
                                                  new FileInputStream(HTML), null, Charset.forName("UTF-8"), fontImp);
         // step 5

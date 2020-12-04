@@ -28,7 +28,7 @@ public enum RestCode {
     BAD_REQUEST_400(400, "请求出错!"),
     BAD_REQUEST_401(401, "用户名或者密码错误!"),
     BAD_REQUEST_402(402, "微信登录失败!"),
-    BAD_REQUEST_403(403, "短信发送失败!"),
+    BAD_REQUEST_403(403, "id不能为空!"),
     BAD_REQUEST_404(404, "60秒以内不能重复发送!"),
     BAD_REQUEST_405(405, "短信发送过于频繁!"),
     BAD_REQUEST_406(406, "图片上传失败!"),
