@@ -3,8 +3,6 @@ package com.resume.api.config;
 import com.alibaba.druid.pool.DruidDataSource;
 import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
-import com.baidu.fsg.uid.impl.DefaultUidGenerator;
-import com.baidu.fsg.uid.impl.UidGenerator;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.util.concurrent.ThreadFactoryBuilder;

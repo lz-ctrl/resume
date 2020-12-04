@@ -27,7 +27,6 @@ mybatis-plus.type-aliases-package: com.resume.api.entity
 mybatis-plus.configuration.map-underscore-to-camel-case: true
 mybatis-plus.configuration.log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 
-
 #微信相关配置
 WeiXin:
   app:
