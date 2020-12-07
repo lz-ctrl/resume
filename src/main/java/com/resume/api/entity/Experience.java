@@ -15,18 +15,17 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("tb_experience")
+@TableName("tb_company_experience")
 public class Experience {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
     private String companyName;
     private String workName;
-    private String companyContent;
-    private Date companyStartTime;
-    private Date companyEndTime;
+    private String content;
     private String achievement;
     private Integer userId;
     private Integer resumeId;
+    private Integer companyId;
     private Date createTime;
 }

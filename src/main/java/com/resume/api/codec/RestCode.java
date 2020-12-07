@@ -33,7 +33,7 @@ public enum RestCode {
     BAD_REQUEST_405(405, "短信发送过于频繁!"),
     BAD_REQUEST_406(406, "图片上传失败!"),
     BAD_REQUEST_407(407, "图片删除失败!"),
-    BAD_REQUEST_408(408, "个人风采最多8张图片!"),
+    BAD_REQUEST_408(408, "key值不正常!"),
     BAD_REQUEST_409(409, "所需数据不存在!"),
     BAD_REQUEST_413(413, "该订单已经使用!"),
     BAD_REQUEST_414(414, "该论文正在准备提交检测系统!"),

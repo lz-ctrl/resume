@@ -17,7 +17,7 @@ public class ExperienceVo {
     @ApiModelProperty("职业名称")
     private String workName;
     @ApiModelProperty("工作内容")
-    private String companyContent;
+    private String content;
     @ApiModelProperty("工作开始时间")
     private Date companyStartTime;
     @ApiModelProperty("工作结束时间")

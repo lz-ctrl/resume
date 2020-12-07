@@ -15,7 +15,7 @@ import java.util.Date;
 @Data
 @EqualsAndHashCode(callSuper = false)
 @Accessors(chain = true)
-@TableName("tb_education")
+@TableName("tb_school_education")
 public class Education {
 
     @TableId(value = "id", type = IdType.AUTO)
@@ -23,9 +23,8 @@ public class Education {
     private String schoolName;
     private Integer studyLevelId;
     private String major;
-    private Date schoolStartTime;
-    private Date schoolEndTime;
     private Integer userId;
     private Integer resumeId;
+    private Integer schoolId;
     private Date createTime;
 }
