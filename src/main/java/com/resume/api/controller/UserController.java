@@ -7,8 +7,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * @author lz
  */
@@ -17,9 +15,9 @@ import javax.servlet.http.HttpServletRequest;
 @RequestMapping("user")
 public class UserController {
 
-    @ApiOperation(value = "用户登录", notes = "需要调用获取token接口(user/token)")
+    @ApiOperation(value = "用户登录注册", notes = "需要调用获取token接口(user/token)")
     @PostMapping("/login")
-    public RestApiResult userLogin( HttpServletRequest request) {
+    public RestApiResult userLogin() {
         System.out.println("进来了");
         return new RestApiResult();
     }
