@@ -1,11 +1,15 @@
 package com.resume.api.service;
 
 import com.resume.api.codec.RestCode;
+import com.resume.api.dao.CompanyMapper;
 import com.resume.api.dao.ExperienceMapper;
+import com.resume.api.dto.ExperienceAllDto;
 import com.resume.api.dto.ExperienceDto;
+import com.resume.api.entity.Company;
 import com.resume.api.entity.Experience;
 import com.resume.api.exception.ServiceException;
 import com.resume.api.utils.BeanUtil;
+import com.resume.api.vo.CompanyExperienceVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -15,10 +19,11 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Service
 public class ExperienceService {
-    final ExperienceMapper experienceMapper;
-
-    public ExperienceService(ExperienceMapper experienceMapper) {
+    private final ExperienceMapper experienceMapper;
+    private final CompanyMapper companyMapper;
+    public ExperienceService(ExperienceMapper experienceMapper, CompanyMapper companyMapper) {
         this.experienceMapper = experienceMapper;
+        this.companyMapper = companyMapper;
     }
 
     /**
@@ -31,10 +36,46 @@ public class ExperienceService {
         if(experienceDto.getResumeId()==null){
             throw new ServiceException(RestCode.BAD_REQUEST_403, "简历id不能为空");
         }
+        if(experienceDto.getUserId()==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_403, "用户id不能为空");
+        }
+        if(experienceDto.getCompanyId()==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_403, "公司id不能为空");
+        }
         Experience experience=new Experience();
         BeanUtil.copyProperties(experienceDto, experience);
         experienceMapper.insert(experience);
         return experience;
+    }
+
+    /**
+     * 新增 工作/实习 经历 同时创建新公司信息
+     * @param experienceAllDto
+     * @return
+     */
+    @Transactional(rollbackFor = Exception.class)
+    public CompanyExperienceVo createAll(ExperienceAllDto experienceAllDto){
+        if(experienceAllDto.getResumeId()==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_403, "简历id不能为空");
+        }
+        if(experienceAllDto.getUserId()==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_403, "用户id不能为空");
+        }
+        //这里先插入公司信息
+        Company company=new Company();
+        BeanUtil.copyProperties(experienceAllDto, company);
+        companyMapper.insert(company);
+        //这里插入工作经历信息
+        Experience experience=new Experience();
+        BeanUtil.copyProperties(experienceAllDto, experience);
+        //将新建的公司id插入到工作经历信息
+        experience.setCompanyId(company.getId());
+        experienceMapper.insert(experience);
+        //将信息返回
+        CompanyExperienceVo companyExperienceVo=new CompanyExperienceVo();
+        companyExperienceVo.setCompany(company);
+        companyExperienceVo.setExperience(experience);
+        return companyExperienceVo;
     }
 
     /**

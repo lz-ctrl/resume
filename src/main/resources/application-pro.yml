@@ -13,9 +13,9 @@ spring:
       suffix : .jsp
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://39.98.234.34:3306/xzq-suyuan?serverTimezone=GMT%2B8
-    username: xzq
-    password: 2Djb6DmPLKJt5SEt
+    url: jdbc:mysql://47.112.187.145:3306/dh-resume?serverTimezone=GMT%2B8
+    username: root
+    password: 10e9074341007840
   redis:
     host: 127.0.0.1
     port: 6379
@@ -26,37 +26,16 @@ spring:
 logging:
   pattern:
     console: "%d - %msg%n"
-  file: /www/wwwrootsuyuan/logs/xzqsuyuan.log
+  file: /www/wwwroot/logs/dh-resume.log
 #spring 扫描实体类路径
 mybatis:
-  type-aliases-package: com.xzq.api.model
+  type-aliases-package: com.resume.api.entity
   mapper-locations: classpath*:mapper/*.xml
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #mybatis-plus
 mybatis-plus.mapper-locations: classpath*:mapper/*.xml
-mybatis-plus.type-aliases-package: com.xzq.api.model
+mybatis-plus.type-aliases-package: com.resume.api.entity
 mybatis-plus.configuration.map-underscore-to-camel-case: true
 mybatis-plus.configuration.log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-#微信相关配置
-WeiXin:
-  app:
-    appId: wxc77bcca27527ea00
-    appSecret: a1214a89e1ba313d581bcf8ef3205dcd
-  official:
-    appId: wxd96252bd9443b3f7
-    appSecret: 76ee96d61e178cfaa0c2577ee5a398fe
-  merchant:
-    mchId: 1488776192
-    paternerKey: 0b2f189fcb73145b3e9b2e870fdab7f0
-  url:
-    transfersPay: https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers
-    transfersPayQuery: https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo
-#拦截配置
-interceptorRegistration:
-  addPathPatterns: "/test.html,/MP_verify_qDG11TOFygoiHt0v.txt,/test2.html,/qrcode/generateqrcode,/qrcode/batchDownloadFiles
-  ,/weixin/merchantpay,/user/login,/pcUser/login,/js/**,/lib/**,/css/**,/fonts/**,/images/**,/DataTables/**,/test0.html
-  ,/*.jpg,/redpacket.html,/businessLicense/findBusinessBoxGoodsInfoById,/businessLicense/queryBusinessLicenseByType
-  ,/businessType/queryBysinessTypeByRole,/businessLicense/queryBusinessLicenseByBusinessTypeId,/businessType/queryRoleByBusinessTypeId
-  ,/businessLicense/registerUser,/businessLicense/registerBusinessAndUser,/user/uploadImage"
 

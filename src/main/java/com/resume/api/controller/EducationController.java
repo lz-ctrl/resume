@@ -33,36 +33,32 @@ public class EducationController {
     @Autowired
     EducationService educationService;
 
-    @ApiOperation(value = "新增教育经历",notes = "新增教育经历")
+    @ApiOperation(value = "新增在校经历",notes = "新增在校经历(需要传简历id以及学校id)")
     @PostMapping()
     public RestApiResult<EducationVo> create(@RequestBody @Validated EducationDto educationDto){
         return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(educationService.create(educationDto), EducationVo.class));
     }
 
-    @ApiOperation(value = "修改教育经历",notes = "修改教育经历")
+    @ApiOperation(value = "修改在校经历",notes = "修改在校经历")
     @PutMapping()
     public RestApiResult<EducationVo> update(@RequestBody @Validated EducationDto educationDto){
         return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(educationService.update(educationDto), EducationVo.class));
     }
 
-    @ApiOperation(value = "删除教育经历",notes = "删除教育经历")
+    @ApiOperation(value = "删除在校经历",notes = "删除在校经历")
     @DeleteMapping("{id}")
     public RestApiResult delete(@PathVariable Integer id){
         educationService.delete(id);
         return new RestApiResult<>(RestCode.SUCCESS);
     }
 
-    @ApiOperation(value = "根据id查询教育经历",notes = "根据id查询教育经历")
+    @ApiOperation(value = "根据id查询在校经历",notes = "根据id查询在校经历")
     @GetMapping("{id}")
     public RestApiResult<EducationVo> get(@PathVariable Integer id){
         return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(educationService.get(id), EducationVo.class));
     }
 
-    @ApiOperation(value = "查询所有学历",notes = "查询所有学历")
-    @PostMapping("level")
-    public RestApiResult<List<StudyLevel>> level(){
-        return new RestApiResult<>(RestCode.SUCCESS, educationService.findStudyLevelAll());
-    }
+
 
 
 }

@@ -11,6 +11,7 @@ import com.resume.api.exception.ServiceException;
 import com.resume.api.utils.BeanUtil;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -20,15 +21,13 @@ import java.util.List;
 public class EducationService {
 
     private final EducationMapper educationMapper;
-    private final StudyLevelMapper studyLevelMapper;
 
-    public EducationService(EducationMapper educationMapper, StudyLevelMapper studyLevelMapper) {
+    public EducationService(EducationMapper educationMapper) {
         this.educationMapper = educationMapper;
-        this.studyLevelMapper = studyLevelMapper;
     }
 
     /**
-     * 新增教育经历
+     * 新增在校经历
      * @param educationDto
      * @return
      */
@@ -36,14 +35,21 @@ public class EducationService {
         if(educationDto.getResumeId()==null){
             throw new ServiceException(RestCode.BAD_REQUEST_403, "简历id不能为空");
         }
+        if(educationDto.getSchoolId()==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_403, "学校id不能为空");
+        }
+        if(educationDto.getUserId()==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_403, "用户id不能为空");
+        }
         Education education=new Education();
         BeanUtil.copyProperties(educationDto, education);
+        education.setCreateTime(new Date());
         educationMapper.insert(education);
         return education;
     }
 
     /**
-     * 修改教育经历
+     * 修改在校经历
      * @param educationDto
      * @return
      */
@@ -58,7 +64,7 @@ public class EducationService {
     }
 
     /**
-     * 根据id查询教育经历
+     * 根据id查询在校经历
      * @param id
      * @return
      */
@@ -82,7 +88,5 @@ public class EducationService {
         return educationMapper.deleteById(id);
     }
 
-    public List<StudyLevel> findStudyLevelAll(){
-        return studyLevelMapper.selectList(new EntityWrapper<StudyLevel>());
-    }
+
 }

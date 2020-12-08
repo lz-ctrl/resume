@@ -1,4 +1,4 @@
-package com.resume.api.dto;
+package com.resume.api.vo;
 
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.Date;
  * @author lz
  */
 @Data
-public class UserDto {
+public class UserVo {
     private Integer id;
     @ApiModelProperty("电话号码")
     private String phone;

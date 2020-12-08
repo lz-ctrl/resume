@@ -24,6 +24,6 @@ public class Company {
     private String post;
     private Date startTime;
     private Date endTime;
-    private Date createTime;
     private Integer resumeId;
+    private Date createTime;
 }

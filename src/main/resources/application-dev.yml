@@ -26,18 +26,3 @@ mybatis-plus.mapper-locations: classpath*:mapper/*.xml
 mybatis-plus.type-aliases-package: com.resume.api.entity
 mybatis-plus.configuration.map-underscore-to-camel-case: true
 mybatis-plus.configuration.log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
-#微信相关配置
-WeiXin:
-  app:
-    appId: wxc77bcca27527ea00
-    appSecret: a1214a89e1ba313d581bcf8ef3205dcd
-  official:
-    appId: wxd96252bd9443b3f7
-    appSecret: 76ee96d61e178cfaa0c2577ee5a398fe
-  merchant:
-    mchId: 1488776192
-    paternerKey: 0b2f189fcb73145b3e9b2e870fdab7f0
-  url:
-    transfersPay: https://api.mch.weixin.qq.com/mmpaymkttransfers/promotion/transfers
-    transfersPayQuery: https://api.mch.weixin.qq.com/mmpaymkttransfers/gettransferinfo

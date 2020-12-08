@@ -2,9 +2,11 @@ package com.resume.api.controller;
 
 import com.resume.api.codec.RestApiResult;
 import com.resume.api.codec.RestCode;
+import com.resume.api.dto.ExperienceAllDto;
 import com.resume.api.dto.ExperienceDto;
 import com.resume.api.service.ExperienceService;
 import com.resume.api.utils.BeanMapper;
+import com.resume.api.vo.CompanyExperienceVo;
 import com.resume.api.vo.ExperienceVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +32,13 @@ public class ExperienceController {
     @Autowired
     ExperienceService experienceService;
 
-    @ApiOperation(value = "新增工作经历",notes = "新增工作经历")
+    @ApiOperation(value = "新增工作经历(同时创建公司信息)",notes = "新增工作经历(同时创建公司信息)")
+    @PostMapping("all")
+    public RestApiResult<CompanyExperienceVo> create(@RequestBody @Validated ExperienceAllDto experienceAllDto){
+        return new RestApiResult<>(RestCode.SUCCESS, experienceService.createAll(experienceAllDto));
+    }
+
+    @ApiOperation(value = "新增工作经历(单独添加,需要传companyId)",notes = "新增工作经历(单独添加,需要传companyId)")
     @PostMapping()
     public RestApiResult<ExperienceVo> create(@RequestBody @Validated ExperienceDto experienceDto){
         return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(experienceService.create(experienceDto), ExperienceVo.class));

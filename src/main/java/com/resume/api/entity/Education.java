@@ -20,9 +20,9 @@ public class Education {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    private String schoolName;
-    private Integer studyLevelId;
-    private String major;
+    private String activityName;
+    private String activityRole;
+    private String content;
     private Integer userId;
     private Integer resumeId;
     private Integer schoolId;

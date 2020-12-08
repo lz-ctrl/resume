@@ -24,7 +24,7 @@ import java.nio.charset.Charset;
 public class JavaToPdfHtmlUtli {
 
 
-    private static final String DEST = "E:\\HelloWorld_CN_HTML.pdf";
+    private static final String DEST = "E:\\";
     private static final String HTML = "E:\\test.html";
     private static final String FONT = "E:\\simhei.ttf";
 
@@ -67,13 +67,16 @@ public class JavaToPdfHtmlUtli {
         ITextFontResolver fontResolver = render.getFontResolver();
         fontResolver.addFont(FONT, com.itextpdf.text.pdf.BaseFont.IDENTITY_H, com.itextpdf.text.pdf.BaseFont.NOT_EMBEDDED);
         // 解析html生成pdf
-        render.setDocumentFromString(stringHtml.toString());
+        render.setDocumentFromString(stringHtml);
         //解决图片相对路径的问题
         render.getSharedContext().setBaseURL(IMG);
         render.layout();
-        render.createPDF(new FileOutputStream(DEST));
-
-        return DEST;
+        String fileName=OnlyStringUtil.OnlyStringUUId()+".pdf";
+        //这里生成PDF文件
+        String path=DEST+fileName;
+        render.createPDF(new FileOutputStream(path));
+        //TODO 正式服务器需要拼接域名下载地址
+        return path;
     }
 
     public static void main(String[] args) {
