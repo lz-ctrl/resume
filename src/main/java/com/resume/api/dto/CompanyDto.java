@@ -22,4 +22,6 @@ public class CompanyDto {
     private Date endTime;
     @ApiModelProperty("简历id(新增必传)")
     private Integer resumeId;
+    @ApiModelProperty("用户id(新增必传)")
+    private Integer userId;
 }

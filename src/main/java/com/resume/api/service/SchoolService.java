@@ -73,6 +73,16 @@ public class SchoolService {
         return school;
     }
 
+
+    /**
+     * 根据简历id查询教育信息
+     * @param resumeId
+     * @return
+     */
+    public List<School> list(Integer resumeId){
+        return schoolMapper.findByResumeIdLevel(resumeId);
+    }
+
     /**
      * 删除学校教育信息
      * @param id

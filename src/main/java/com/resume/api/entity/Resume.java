@@ -25,7 +25,10 @@ public class Resume {
     private String headImg;
     private String expect;
     private Double salary;
-    private String other;
+    private Date birthdayTime;
+    private Integer gender;
+    private String emailWx;
+    private String phone;
     private String awards;
     private String interest;
     private Integer userId;

@@ -20,8 +20,6 @@ public class ResumeVo {
     private String expect;
     @ApiModelProperty("期望薪水")
     private Double salary;
-    @ApiModelProperty("其它经历")
-    private String other;
     @ApiModelProperty("获奖证书")
     private String awards;
     @ApiModelProperty("兴趣爱好")
@@ -30,4 +28,12 @@ public class ResumeVo {
     private Integer userId;
     @ApiModelProperty("创建时间")
     private Date createTime;
+    @ApiModelProperty("生日")
+    private Date birthdayTime;
+    @ApiModelProperty("性别")
+    private Integer gender;
+    @ApiModelProperty("邮箱或微信号")
+    private String emailWx;
+    @ApiModelProperty("电话")
+    private String phone;
 }

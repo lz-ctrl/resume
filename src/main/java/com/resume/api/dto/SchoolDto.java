@@ -24,4 +24,6 @@ public class SchoolDto {
     private String major;
     @ApiModelProperty("简历id(新增必传)")
     private Integer resumeId;
+    @ApiModelProperty("学历id")
+    private Integer studyLevelId;
 }

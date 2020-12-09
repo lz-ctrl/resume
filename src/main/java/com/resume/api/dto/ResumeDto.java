@@ -19,14 +19,23 @@ public class ResumeDto {
     private String expect;
     @ApiModelProperty("期望薪水")
     private Double salary;
-    @ApiModelProperty("其它经历")
-    private String other;
     @ApiModelProperty("获奖证书")
     private String awards;
     @ApiModelProperty("兴趣爱好")
     private String interest;
     @ApiModelProperty("所属用户id")
     private Integer userId;
-    @ApiModelProperty("创建时间")
-    private Date createTime;
+    @ApiModelProperty("生日")
+    private Date birthdayTime;
+    @ApiModelProperty("性别")
+    private Integer gender;
+    @ApiModelProperty("邮箱或微信号")
+    private String emailWx;
+    @ApiModelProperty("电话")
+    private String phone;
+
+    @ApiModelProperty("当前页")
+    private Integer page;
+    @ApiModelProperty("每页条数")
+    private Integer size;
 }

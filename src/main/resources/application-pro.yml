@@ -2,20 +2,16 @@ server:
   port: 6376
   address: 0.0.0.0
   ssl:
-    key-store: classpath:3768539_www.xizhique.com.pfx
-    key-store-password: S0JNuaJU
+    key-store: classpath:4889133_www.superdaheng.com.pfx
+    key-store-password: zn51C4VO
     key-store-type: PKCS12
 
 spring:
-  mvc:
-    view:
-      prefix : /WEB-INF/views/
-      suffix : .jsp
   datasource:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://47.112.187.145:3306/dh-resume?serverTimezone=GMT%2B8
     username: root
-    password: 10e9074341007840
+    password: NnjFarEY3EwShkBj
   redis:
     host: 127.0.0.1
     port: 6379
@@ -38,4 +34,13 @@ mybatis-plus.mapper-locations: classpath*:mapper/*.xml
 mybatis-plus.type-aliases-package: com.resume.api.entity
 mybatis-plus.configuration.map-underscore-to-camel-case: true
 mybatis-plus.configuration.log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
-
+#文件路径配置
+PDF:
+  DEST: /www/server/tomcat/webapps/office
+  HTML: /www/server/tomcat/webapps/office
+  FONT: /www/wwwroot/font/simhei.ttf
+file:
+  img: /www/server/tomcat/webapps/img
+WeiXin:
+    appId: wx370c238bee33c668
+    appSecret: 79306d329b2248f4ae6d6733311b27cd

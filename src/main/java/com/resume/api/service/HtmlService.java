@@ -119,7 +119,7 @@ public class HtmlService {
             }
             stringHtml.append("</div>");
             //证书获奖的DIV块
-            if(resume.getAwards()!=null||!"".equals(resume.getAwards())){
+            if(resume.getAwards()!=null&&!"".equals(resume.getAwards())){
                 stringHtml.append("<div class=\"jl\"><br />");
                 stringHtml.append("<span class=\"fontb\">证书/获奖</span><hr />");
                 stringHtml.append("<div class=\"jls\"><span class=\"fonts\">");
@@ -128,7 +128,7 @@ public class HtmlService {
                 stringHtml.append("</div>");
             }
             //兴趣爱好的DIV块
-            if(resume.getInterest()!=null||!"".equals(resume.getInterest())){
+            if(resume.getInterest()!=null&&!"".equals(resume.getInterest())){
             stringHtml.append("<div class=\"jl\"><br />");
             stringHtml.append("<span class=\"fontb\">个人兴趣爱好</span><hr />");
             stringHtml.append("<div class=\"jls\"><span class=\"fonts\">");

@@ -20,8 +20,6 @@ public class Experience {
 
     @TableId(value = "id", type = IdType.AUTO)
     private Integer id;
-    private String companyName;
-    private String workName;
     private String content;
     private String achievement;
     private Integer userId;

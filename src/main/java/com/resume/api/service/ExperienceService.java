@@ -8,10 +8,15 @@ import com.resume.api.dto.ExperienceDto;
 import com.resume.api.entity.Company;
 import com.resume.api.entity.Experience;
 import com.resume.api.exception.ServiceException;
+import com.resume.api.utils.BeanMapper;
 import com.resume.api.utils.BeanUtil;
 import com.resume.api.vo.CompanyExperienceVo;
+import com.resume.api.vo.ExperienceAllVo;
+import com.resume.api.vo.ExperienceVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 
 /**
@@ -116,6 +121,20 @@ public class ExperienceService {
         }
         Experience experience= experienceMapper.selectById(id);
         return experience;
+    }
+
+    /**
+     * 根据条件查询list
+     * @param experienceDto
+     * @return
+     */
+    public List<ExperienceAllVo> list(ExperienceDto experienceDto){
+        if(experienceDto.getUserId()==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_403,"用户id不能为空");
+        }
+        Experience experience=new Experience();
+        BeanUtil.copyProperties(experienceDto, experience);
+        return experienceMapper.findAll(experience);
     }
 
 }

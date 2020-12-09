@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.resume.api.dao.UserMapper">
+<mapper namespace="com.resume.api.dao.SchoolMapper">
 
-    <select id="findByResumeIdLevel" parameterType="Integer" resultType="com.resume.api.entity.User">
-    	SELECT a.*,b.content FROM tb_school a
+    <select id="findByResumeIdLevel" parameterType="Integer" resultType="com.resume.api.entity.School">
+    	SELECT a.*,b.content as study_level_name FROM tb_school a
     	LEFT JOIN tb_study_level b ON a.study_level_id=b.id
     	WHERE resume_id=#{id}
     </select>

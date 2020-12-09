@@ -7,12 +7,12 @@ import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerFontProvider;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
-import com.lowagie.text.pdf.BaseFont;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -20,16 +20,25 @@ import java.nio.charset.Charset;
 /**
  * @author lz
  */
+@Component
+public class JavaToPdfHtmlUtil {
 
-public class JavaToPdfHtmlUtli {
+    private static String DEST;
+    private static String HTML;
+    private static String FONT;
 
-
-    private static final String DEST = "E:\\";
-    private static final String HTML = "E:\\test.html";
-    private static final String FONT = "E:\\simhei.ttf";
-
-    private static final String IMG = "E:\\timg.jpg";
-
+    @Value("${PDF.DEST}")
+    public void setDEST(String dest){
+        DEST=dest;
+    }
+    @Value("${PDF.HTML}")
+    public void setHTML(String html){
+        HTML=html;
+    }
+    @Value("${PDF.FONT}")
+    public void setFONT(String font){
+        FONT=font;
+    }
 
     /**
      * HTML转换为PDF 无高级CSS样式以及图片
@@ -48,8 +57,10 @@ public class JavaToPdfHtmlUtli {
         // step 4
         XMLWorkerFontProvider fontImp = new XMLWorkerFontProvider(XMLWorkerFontProvider.DONTLOOKFORFONTS);
         fontImp.register(FONT);
+        //生成html文件名称
+        String htmlPath=HTML+OnlyStringUtil.OnlyStringUUId()+".html";
         XMLWorkerHelper.getInstance().parseXHtml(writer, document,
-                                                 new FileInputStream(HTML), null, Charset.forName("UTF-8"), fontImp);
+                                                 new FileInputStream(htmlPath), null, Charset.forName("UTF-8"), fontImp);
         // step 5
         document.close();
         return DEST;
@@ -68,8 +79,6 @@ public class JavaToPdfHtmlUtli {
         fontResolver.addFont(FONT, com.itextpdf.text.pdf.BaseFont.IDENTITY_H, com.itextpdf.text.pdf.BaseFont.NOT_EMBEDDED);
         // 解析html生成pdf
         render.setDocumentFromString(stringHtml);
-        //解决图片相对路径的问题
-        render.getSharedContext().setBaseURL(IMG);
         render.layout();
         String fileName=OnlyStringUtil.OnlyStringUUId()+".pdf";
         //这里生成PDF文件

@@ -9,21 +9,23 @@ import java.util.Date;
  * @author lz
  */
 @Data
-public class CompanyVo {
+public class ExperienceAllVo {
     @ApiModelProperty("id")
     private Integer id;
     @ApiModelProperty("公司名称")
     private String name;
-    @ApiModelProperty("担任职务")
+    @ApiModelProperty("职业名称")
     private String post;
     @ApiModelProperty("公司开始时间")
     private Date startTime;
     @ApiModelProperty("公司结束时间")
     private Date endTime;
-    @ApiModelProperty("简历id")
-    private Integer resumeId;
-    @ApiModelProperty("创建时间")
-    private Date createTime;
-    @ApiModelProperty("用户id")
+    @ApiModelProperty("工作内容 用<li>隔开</li>")
+    private String content;
+    @ApiModelProperty("工作业绩 用<li>隔开</li>")
+    private String achievement;
+    @ApiModelProperty("所属用户id(新增必传)")
     private Integer userId;
+    @ApiModelProperty("所属简历id(新增必传)")
+    private Integer resumeId;
 }

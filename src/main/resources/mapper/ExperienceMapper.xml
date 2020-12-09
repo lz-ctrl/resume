@@ -2,6 +2,17 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.api.dao.ExperienceMapper">
 
+    <select id="findAll" parameterType="com.resume.api.entity.Experience" resultType="com.resume.api.vo.ExperienceAllVo">
+    	SELECT * FROM tb_company c
+        LEFT JOIN tb_company_experience ce ON c.id=ce.company_id
+        WHERE c.user_id=${userId}
+        <if test="resumeId != null">
+            AND  c.resume_id=${resumeId}
+        </if>
+        <if test="id != null">
+            AND  c.id=${companyId}
+        </if>
+    </select>
 
 
 </mapper>

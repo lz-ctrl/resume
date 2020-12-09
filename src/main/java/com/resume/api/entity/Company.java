@@ -26,4 +26,5 @@ public class Company {
     private Date endTime;
     private Integer resumeId;
     private Date createTime;
+    private Integer userId;
 }

@@ -4,12 +4,15 @@ import com.resume.api.codec.RestApiResult;
 import com.resume.api.codec.RestCode;
 import com.resume.api.dto.SchoolDto;
 import com.resume.api.entity.StudyLevel;
+import com.resume.api.exception.ServiceException;
 import com.resume.api.service.SchoolService;
 import com.resume.api.utils.BeanMapper;
 import com.resume.api.vo.SchoolVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.repository.query.Param;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +21,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -56,6 +60,15 @@ public class SchoolController {
     @GetMapping("{id}")
     public RestApiResult<SchoolVo> get(@PathVariable Integer id){
         return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(schoolService.get(id), SchoolVo.class));
+    }
+
+    @ApiOperation(value = "根据简历ID查询教育信息列表",notes = "根据简历ID查询教育信息列表")
+    @PostMapping("list")
+    public RestApiResult<List<SchoolVo>> list(@RequestBody @Validated SchoolDto schoolDto) throws ServiceException {
+        if(schoolDto==null||schoolDto.getResumeId()==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_403,"简历id不能为空");
+        }
+        return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.mapList(schoolService.list(schoolDto.getResumeId()), SchoolVo.class));
     }
 
     @ApiOperation(value = "查询所有学历",notes = "查询所有学历(对应studyLevelId)")

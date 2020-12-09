@@ -13,7 +13,7 @@ public class ExperienceAllDto {
     @ApiModelProperty("id")
     private Integer id;
     @ApiModelProperty("公司名称")
-    private String companyName;
+    private String name;
     @ApiModelProperty("职业名称")
     private String post;
     @ApiModelProperty("公司开始时间")

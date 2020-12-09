@@ -7,6 +7,7 @@ import com.resume.api.dto.ExperienceDto;
 import com.resume.api.service.ExperienceService;
 import com.resume.api.utils.BeanMapper;
 import com.resume.api.vo.CompanyExperienceVo;
+import com.resume.api.vo.ExperienceAllVo;
 import com.resume.api.vo.ExperienceVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -20,6 +21,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * @author lz
@@ -61,6 +64,12 @@ public class ExperienceController {
     @GetMapping("{id}")
     public RestApiResult<ExperienceVo> get(@PathVariable Integer id){
         return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(experienceService.get(id), ExperienceVo.class));
+    }
+
+    @ApiOperation(value = "根据简历id或者公司id查询工作经历list",notes = "根据简历id或者公司id查询工作经历list(用户id必传)")
+    @PostMapping("list")
+    public RestApiResult<List<ExperienceAllVo>> list(@RequestBody @Validated ExperienceDto experienceDto){
+        return new RestApiResult<>(RestCode.SUCCESS,experienceService.list(experienceDto));
     }
 
 }

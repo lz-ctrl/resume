@@ -36,7 +36,7 @@ public enum RestCode {
     BAD_REQUEST_408(408, "key值不正常!"),
     BAD_REQUEST_409(409, "所需数据不存在!"),
     BAD_REQUEST_413(413, "该订单已经使用!"),
-    BAD_REQUEST_414(414, "该论文正在准备提交检测系统!"),
+    BAD_REQUEST_414(414, "请传入分页数据!"),
     BAD_REQUEST_415(415, "商品已存在，换个商品吧！"),
     BAD_REQUEST_416(416, "账上仟币不足!"),
     BAD_REQUEST_417(417, "订单已过期!"),

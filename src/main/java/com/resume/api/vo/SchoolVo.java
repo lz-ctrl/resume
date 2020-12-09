@@ -26,4 +26,6 @@ public class SchoolVo {
     private String major;
     @ApiModelProperty("简历id")
     private Integer resumeId;
+    @ApiModelProperty("学历名称")
+    private String studyLevelName;
 }
