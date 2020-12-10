@@ -19,7 +19,7 @@ public class ResumeVo {
     @ApiModelProperty("求职期望")
     private String expect;
     @ApiModelProperty("期望薪水")
-    private Double salary;
+    private String salary;
     @ApiModelProperty("获奖证书")
     private String awards;
     @ApiModelProperty("兴趣爱好")

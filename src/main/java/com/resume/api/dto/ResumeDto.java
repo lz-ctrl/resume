@@ -13,12 +13,12 @@ public class ResumeDto {
     private Integer id;
     @ApiModelProperty("简历名称")
     private String resumeName;
-    @ApiModelProperty("头像")
+    @ApiModelProperty("头像base64")
     private String headImg;
     @ApiModelProperty("求职期望")
     private String expect;
     @ApiModelProperty("期望薪水")
-    private Double salary;
+    private String salary;
     @ApiModelProperty("获奖证书")
     private String awards;
     @ApiModelProperty("兴趣爱好")

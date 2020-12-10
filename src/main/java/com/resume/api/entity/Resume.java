@@ -24,7 +24,7 @@ public class Resume {
     private String resumeName;
     private String headImg;
     private String expect;
-    private Double salary;
+    private String salary;
     private Date birthdayTime;
     private Integer gender;
     private String emailWx;

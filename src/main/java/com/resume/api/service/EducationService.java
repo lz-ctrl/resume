@@ -88,5 +88,18 @@ public class EducationService {
         return educationMapper.deleteById(id);
     }
 
+    /**
+     * 条件查询list
+     * @param educationDto
+     * @return
+     */
+    public List<Education> list(EducationDto educationDto){
+        if(educationDto.getUserId()==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_403,"用户id不能为空");
+        }
+        Education education=new Education();
+        BeanUtil.copyProperties(educationDto, education);
+        return educationMapper.findAll(education);
+    }
 
 }

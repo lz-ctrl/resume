@@ -1,18 +1,23 @@
 package com.resume.api.service;
 
 import com.resume.api.codec.RestCode;
+import com.resume.api.dao.EducationMapper;
 import com.resume.api.dao.ExperienceMapper;
 import com.resume.api.dao.ResumeMapper;
-import com.resume.api.dao.UserMapper;
+import com.resume.api.dao.SchoolMapper;
+import com.resume.api.entity.Education;
 import com.resume.api.entity.Experience;
 import com.resume.api.entity.Resume;
 import com.resume.api.entity.School;
-import com.resume.api.entity.User;
 import com.resume.api.exception.ServiceException;
+import com.resume.api.utils.OnlyStringUtil;
+import com.resume.api.vo.ExperienceAllVo;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.FileNotFoundException;
 import java.io.PrintStream;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 
@@ -25,19 +30,24 @@ import java.util.List;
 public class HtmlService {
 
     private final ResumeMapper resumeMapper;
-    private final UserMapper userMapper;
     private final ExperienceMapper experienceMapper;
+    private final SchoolMapper schoolMapper;
+    private  final EducationMapper educationMapper;
 
-    public HtmlService(ResumeMapper resumeMapper, UserMapper userMapper, ExperienceMapper experienceMapper) {
+    public HtmlService(ResumeMapper resumeMapper, ExperienceMapper experienceMapper, SchoolMapper schoolMapper, EducationMapper educationMapper) {
         this.resumeMapper = resumeMapper;
-        this.userMapper = userMapper;
         this.experienceMapper = experienceMapper;
+        this.schoolMapper = schoolMapper;
+        this.educationMapper = educationMapper;
     }
 
     /**
      *这里是HTML存放的路径
      */
-    private static final String HTML_URL = "E:\\test.html";
+    @Value("${PDF.HTML}")
+    private String HTML;
+
+    private static final SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
 
     /**
      * 测试用图片base64编码
@@ -48,22 +58,20 @@ public class HtmlService {
      * 传入简历的id，查询出简历的所有数据
      * 遍历数据到HTML里面
      * @param resumeId
+     * @param userId
      * @return
      */
-    public String firstHtml(Integer resumeId){
+    public String firstHtml(Integer resumeId,Integer userId){
         //查询出该简历内容
         Resume resume=resumeMapper.selectById(resumeId);
-        //查询出用户信息
-        User user=userMapper.selectById(resume.getUserId());
-        if(user==null){
-            throw new ServiceException(RestCode.TOKEN_ERROR_503);
+        if(resume==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_416,"简历信息不存在");
         }
-
-        Experience experience= experienceMapper.selectById(1);
         //用于存储html字符串
         StringBuffer stringHtml = new StringBuffer();
         try{
             //打开/新建HTML文件
+            String HTML_URL=HTML+ OnlyStringUtil.OnlyStringDate()+"_html.html";
             PrintStream printStream = new PrintStream(HTML_URL);
             //写入HTML文件内容
             stringHtml.append("<!DOCTYPE html>");
@@ -74,49 +82,50 @@ public class HtmlService {
             stringHtml.append("<div style=\"width: 100%; height: 165px; margin: auto;\">");
             stringHtml.append("<div style=\"width:40%; height: 120px; float: left;\">");
             stringHtml.append("<span style=\"font-size: 20px; font-weight: bold;\">言职青年</span><br /><br />");
-            stringHtml.append("<span class=\"fonts\">"+user.getPhone()+" 丨"+user.getEmail()+" <br /><br />求职意向: UI设计师 丨期望薪资: 6-8k</span></div><br />");
+            stringHtml.append("<span class=\"fonts\">"+resume.getPhone()+" 丨"+resume.getEmailWx()+" <br /><br />求职意向: "+resume.getExpect()+" 丨期望薪资: "+resume.getSalary()+"</span></div><br />");
             stringHtml.append("<div style=\"height: 180px; float: right;\"><img style=\"width: 100px; height: 100px;\" src=\""+IMG+"\" /></div></div>");
             stringHtml.append("<div class=\"jl\">");
             stringHtml.append("<span class=\"fontb\">教育经历</span><hr />");
             //这里是所在学校的DIV模块
-            for(int i=0;i<1;i++){
-                stringHtml.append("<div class=\"jls\"><span class=\"fonth\">杜伦大学</span><span class=\"fonts\"> - 金融学 本科</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />");
-            }
+            List<School> schoolList=schoolMapper.findByResumeIdLevel(resumeId);
+            schoolList.forEach(school -> {
+                String startTime=sdf.format(school.getStartTime());
+                String endTime=sdf.format(school.getEndTime());
+                stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+school.getName()+"</span><span class=\"fonts\"> - "+school.getMajor()+" "+school.getStudyLevelName()+"</span><div class=\"fontdate\" >"+startTime+" - "+endTime+"</div></div><br />");
+            });
             stringHtml.append("</div>");
+            //这里开始是工作经历DIV模块
+            List<ExperienceAllVo> allVos=experienceMapper.findAll(new Experience().setResumeId(resumeId).setUserId(userId));
             stringHtml.append("<div class=\"jl\">");
             stringHtml.append("<span class=\"fontb\">工作经历</span><hr />");
-
-            //这里开始是工作经历DIV模块
-            stringHtml.append("<div class=\"jls\"><span class=\"fonth\">北京咨询有限公司</span><span class=\"fonts\"> - 兼职项目助理</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
-            for(int i=0;i<1;i++){
-                stringHtml.append("<span class=\"fonth\">内容</span>");
-                stringHtml.append("<ul style=\" font-size:9pt\">");
-                stringHtml.append(experience.getContent());
-                stringHtml.append("</ul>");
-                stringHtml.append("<span class=\"fonth\">业绩</span>");
-                stringHtml.append("<ul style=\" font-size:9pt\">");
-                stringHtml.append(experience.getAchievement());
-                stringHtml.append("</ul>");
-            }
+            allVos.forEach(experienceAllVo -> {
+                stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+experienceAllVo.getName()+"</span><span class=\"fonts\"> - "+experienceAllVo.getPost()+"</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
+                if(experienceAllVo.getContent()!=null&&!"".equals(experienceAllVo.getContent())) {
+                    stringHtml.append("<span class=\"fonth\">内容</span>");
+                    stringHtml.append("<ul style=\" font-size:9pt\">");
+                    stringHtml.append(experienceAllVo.getContent());
+                    stringHtml.append("</ul>");
+                }
+                if(experienceAllVo.getAchievement()!=null&&!"".equals(experienceAllVo.getAchievement())) {
+                    stringHtml.append("<span class=\"fonth\">业绩</span>");
+                    stringHtml.append("<ul style=\" font-size:9pt\">");
+                    stringHtml.append(experienceAllVo.getAchievement());
+                    stringHtml.append("</ul>");
+                }
+            });
             stringHtml.append("</div>");
-
             //这里开始是在校经历DIV模块
+            List<Education> educationList=educationMapper.findAll(new Education().setResumeId(resumeId).setUserId(userId));
             stringHtml.append("<div class=\"jl\"><br />");
             stringHtml.append("<span class=\"fontb\">在校/其它经历</span><hr />");
-            for(int i=0;i<1;i++){
-                stringHtml.append("<div class=\"jls\"><span class=\"fonth\">校学生会</span><span class=\"fonts\"> - 学生会委员</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
+            educationList.forEach(education -> {
+                String startTime=sdf.format(education.getStartTime());
+                String endTime=sdf.format(education.getEndTime());
+                stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+education.getActivityName()+"</span><span class=\"fonts\"> - "+education.getActivityRole()+"</span><div class=\"fontdate\" >"+startTime+" - "+endTime+"</div></div><br />\n");
                 stringHtml.append("<ul style=\" font-size:9pt\">");
-                stringHtml.append("<li>协调校团委各部门的工作，协同校团委文体部、组织部，先后成功组织“闪青”、“彩跑”等大型学院活动，活动平 均参与人数500+</li>");
-                stringHtml.append("<li>创建并运营团委微信公众平台，审核编辑推送内容，报道团委活动，订阅号平均阅读量1000+</li>");
+                stringHtml.append(education.getContent());
                 stringHtml.append("</ul>");
-            }
-            for(int i=0;i<1;i++){
-                stringHtml.append("<br /><div class=\"jls\"><span class=\"fonth\">组织培训竞赛</span><span class=\"fonts\"> - 活动负责人</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
-                stringHtml.append("<ul style=\" font-size:9pt\">");
-                stringHtml.append("<li>开展赛前宣传，吸引了400余名同学参加初赛。组织校内选拔和培训，邀请了来自包括清华大学等北京高校在内的13 名老师开展培训，并选拔出20名同学代表学校参赛</li>");
-                stringHtml.append("<li>负责培训内容细化，收集分析历年比赛试卷，将比赛内容细分为5个方面，并辅导两支参赛队伍</li>");
-                stringHtml.append("</ul>");
-            }
+            });
             stringHtml.append("</div>");
             //证书获奖的DIV块
             if(resume.getAwards()!=null&&!"".equals(resume.getAwards())){

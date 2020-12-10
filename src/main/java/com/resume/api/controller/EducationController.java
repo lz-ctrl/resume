@@ -3,10 +3,12 @@ package com.resume.api.controller;
 import com.resume.api.codec.RestApiResult;
 import com.resume.api.codec.RestCode;
 import com.resume.api.dto.EducationDto;
+import com.resume.api.dto.ExperienceDto;
 import com.resume.api.entity.StudyLevel;
 import com.resume.api.service.EducationService;
 import com.resume.api.utils.BeanMapper;
 import com.resume.api.vo.EducationVo;
+import com.resume.api.vo.ExperienceAllVo;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,6 +60,11 @@ public class EducationController {
         return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(educationService.get(id), EducationVo.class));
     }
 
+    @ApiOperation(value = "根据简历id或者学习id查询学习/其他经历",notes = "根据简历id或者学习id查询学习/其他经历(用户id必传)")
+    @PostMapping("list")
+    public RestApiResult<List<EducationVo>> list(@RequestBody @Validated EducationDto educationDto){
+        return new RestApiResult<>(RestCode.SUCCESS,BeanMapper.mapList(educationService.list(educationDto),EducationVo.class));
+    }
 
 
 

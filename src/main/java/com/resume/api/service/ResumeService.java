@@ -126,8 +126,7 @@ public class ResumeService {
         // 图片路径
         StringBuilder stringBuilder = new StringBuilder();
         // 文件不大于5M
-        System.out.println(file.getSize()+"===================");
-        if(!FileUploadUtil.checkFileSize( file.getSize(),10,"M")){
+        if(!FileUploadUtil.checkFileSize( file.getSize(),5,"M")){
             throw new ServiceException(RestCode.BAD_REQUEST_406,"图片大小不得超过5MB");
         }
         try {

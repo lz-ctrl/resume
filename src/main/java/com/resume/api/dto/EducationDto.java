@@ -1,5 +1,6 @@
 package com.resume.api.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -25,4 +26,10 @@ public class EducationDto {
     private Integer resumeId;
     @ApiModelProperty("所属学校id(新增必传)")
     private Integer schoolId;
+    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM-dd")
+    @ApiModelProperty("经历开始时间")
+    private Date startTime;
+    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM-dd")
+    @ApiModelProperty("经历结束时间")
+    private Date endTime;
 }

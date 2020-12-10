@@ -2,11 +2,9 @@ package com.resume.api.utils;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
-
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerFontProvider;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
-
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
@@ -69,11 +67,12 @@ public class JavaToPdfHtmlUtil {
     /**
      * HTML转换为PDF 高级CSS 图片
      * @param stringHtml
+     * @param key 0返回访问路径 1返回绝对路径
      * @return
      * @throws IOException
      * @throws com.lowagie.text.DocumentException
      */
-    public static String CreatePDFRenderer(String stringHtml) throws IOException, com.lowagie.text.DocumentException {
+    public static String CreatePDFRenderer(String stringHtml,Integer key) throws IOException, com.lowagie.text.DocumentException {
         ITextRenderer render = new ITextRenderer();
         ITextFontResolver fontResolver = render.getFontResolver();
         fontResolver.addFont(FONT, com.itextpdf.text.pdf.BaseFont.IDENTITY_H, com.itextpdf.text.pdf.BaseFont.NOT_EMBEDDED);
@@ -85,8 +84,15 @@ public class JavaToPdfHtmlUtil {
         String path=DEST+fileName;
         render.createPDF(new FileOutputStream(path));
         //TODO 正式服务器需要拼接域名下载地址
-        return path;
+        String resultPath="http://47.112.187.145:8080/office/"+fileName;
+        //这里的key用来判断是否返回访问路径还是绝对路径
+        if(key==0){
+            return resultPath;
+        }else{
+            return path;
+        }
     }
+
 
     public static void main(String[] args) {
 

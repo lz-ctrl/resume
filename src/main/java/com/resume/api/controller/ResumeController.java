@@ -3,12 +3,16 @@ package com.resume.api.controller;
 import com.lowagie.text.DocumentException;
 import com.resume.api.codec.RestApiResult;
 import com.resume.api.codec.RestCode;
+import com.resume.api.dto.ExportDto;
 import com.resume.api.dto.ResumeDto;
 import com.resume.api.exception.ServiceException;
 import com.resume.api.service.HtmlService;
 import com.resume.api.service.ResumeService;
 import com.resume.api.utils.BeanMapper;
 import com.resume.api.utils.JavaToPdfHtmlUtil;
+import com.resume.api.utils.PdfToImageUtil;
+import com.resume.api.utils.SpireUtil;
+import com.resume.api.vo.ExportVo;
 import com.resume.api.vo.PageVo;
 import com.resume.api.vo.ResumeVo;
 import io.swagger.annotations.Api;
@@ -26,6 +30,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 /**
  * @author lz
@@ -79,36 +84,56 @@ public class ResumeController {
      * @return
      */
     @ApiOperation(value = "头像上传",notes = "头像上传")
-    @PostMapping("/uploadImage")
+    @PostMapping("/img")
     public RestApiResult<String> uploadImage(@RequestParam("file") MultipartFile file) {
         return new RestApiResult<>(RestCode.SUCCESS, resumeService.uploadImage(file));
     }
 
 
     @ApiOperation(value = "导出简历",notes = "导出简历")
-    @RequestMapping("export")
-    public String exportResume(Integer id, String key) throws IOException, DocumentException {
+    @PostMapping("export")
+    public RestApiResult<ExportVo> exportResume(@RequestBody ExportDto exportDto) throws IOException, DocumentException {
+        Integer userId=exportDto.getUserId();
+        Integer resumeId=exportDto.getResumeId();
+        String key=exportDto.getKey();
+        System.out.println(key);
+        if(key==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_408,"key值为空");
+        }
+        if(userId==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_403,"用户id不能为空");
+        }
         //用来存储路径的
         String path="";
         //存储HTML信息
         String stringHtml="";
+        //最终返回VC
+        ExportVo exportVo=new ExportVo();
         switch(key){
             case "PDF":
                 //表示导出PDF
-                stringHtml = htmlService.firstHtml(id);
-                path= JavaToPdfHtmlUtil.CreatePDFRenderer(stringHtml);
+                stringHtml = htmlService.firstHtml(resumeId,userId);
+                path= JavaToPdfHtmlUtil.CreatePDFRenderer(stringHtml,0);
+                exportVo.setPath(path);
                 break;
             case "PNG":
                 //表示导出图片
-
+                stringHtml = htmlService.firstHtml(resumeId,userId);
+                path= JavaToPdfHtmlUtil.CreatePDFRenderer(stringHtml,1);
+                List<String> list= PdfToImageUtil.pdfToImageList(path);
+                exportVo.setImgPath(list);
                 break;
             case "DOC":
                 //表示导出word文档
+                stringHtml = htmlService.firstHtml(resumeId,userId);
+                path= JavaToPdfHtmlUtil.CreatePDFRenderer(stringHtml,1);
+                path= SpireUtil.PDFToWord(path);
+                exportVo.setPath(path);
                 break;
             default:
                 throw new ServiceException(RestCode.BAD_REQUEST_408);
         }
-        return path;
+        return new RestApiResult<>(RestCode.SUCCESS,exportVo);
     }
 
 }

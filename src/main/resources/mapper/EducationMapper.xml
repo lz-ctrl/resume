@@ -2,4 +2,15 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.resume.api.dao.EducationMapper">
 
+    <select id="findAll" parameterType="com.resume.api.entity.Education" resultType="com.resume.api.entity.Education">
+        SELECT * FROM tb_school_education
+        WHERE user_id=#{userId}
+        <if test="resumeId != null">
+            AND  resume_id=#{resumeId}
+        </if>
+        <if test="schoolId != null">
+            AND  school_id=#{schoolId}
+        </if>
+    </select>
+
 </mapper>

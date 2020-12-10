@@ -6,7 +6,11 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerFontProvider;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import com.spire.pdf.FileFormat;
+import com.spire.pdf.PdfDocument;
 import net.coobird.thumbnailator.Thumbnails;
+import org.apache.pdfbox.pdmodel.PDDocument;
+import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.poifs.filesystem.DirectoryEntry;
 import org.apache.poi.poifs.filesystem.DocumentEntry;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
@@ -20,7 +24,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.io.PrintStream;
+import java.io.Writer;
 import java.nio.charset.Charset;
 
 /**
@@ -41,7 +47,7 @@ public class test {
                   .scale(0.1f)
                   .outputQuality(0.5f)
                   .toFile("E://11111.jpg");*/
-        String html = "<div>测试内容</div";
+
 
 
 
@@ -94,7 +100,7 @@ public class test {
                stringHtml.append("</ul>");
            }
             for(int i=0;i<1;i++){
-                stringHtml.append("<br /><div class=\"jls\"><span class=\"fonth\">组织培训竞赛</span><span class=\"fonts\"> - 活动负责人</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
+                stringHtml.append("<div class=\"jls\"><span class=\"fonth\">组织培训竞赛</span><span class=\"fonts\"> - 活动负责人</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
                 stringHtml.append("<ul style=\" font-size:9pt\">");
                 stringHtml.append("<li>开展赛前宣传，吸引了400余名同学参加初赛。组织校内选拔和培训，邀请了来自包括清华大学等北京高校在内的13 名老师开展培训，并选拔出20名同学代表学校参赛</li>");
                 stringHtml.append("<li>负责培训内容细化，收集分析历年比赛试卷，将比赛内容细分为5个方面，并辅导两支参赛队伍</li>");
@@ -114,6 +120,10 @@ public class test {
             printStream.println(stringHtml.toString());
 
             //这里把HTML转成WORD
+            PdfDocument pdf = new PdfDocument();
+            pdf.loadFromFile(DEST);
+            pdf.saveToFile("E://ToWord.docx", FileFormat.DOCX);
+
 
             //这里把HTML转成PDF
             ITextRenderer render = new ITextRenderer();

@@ -27,4 +27,6 @@ public class Education {
     private Integer resumeId;
     private Integer schoolId;
     private Date createTime;
+    private Date startTime;
+    private Date endTime;
 }

@@ -38,7 +38,7 @@ public enum RestCode {
     BAD_REQUEST_413(413, "该订单已经使用!"),
     BAD_REQUEST_414(414, "请传入分页数据!"),
     BAD_REQUEST_415(415, "商品已存在，换个商品吧！"),
-    BAD_REQUEST_416(416, "账上仟币不足!"),
+    BAD_REQUEST_416(416, "信息不存在!"),
     BAD_REQUEST_417(417, "订单已过期!"),
     BAD_REQUEST_418(418, "请先设置支付密码!"),
     BAD_REQUEST_419(419, "支付密码错误!"),

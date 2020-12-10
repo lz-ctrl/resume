@@ -27,4 +27,8 @@ public class EducationVo {
     private Integer schoolId;
     @ApiModelProperty("创建时间")
     private Date createTime;
+    @ApiModelProperty("经历开始时间")
+    private Date startTime;
+    @ApiModelProperty("经历结束时间")
+    private Date endTime;
 }

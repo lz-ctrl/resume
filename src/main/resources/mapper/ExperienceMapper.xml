@@ -5,12 +5,12 @@
     <select id="findAll" parameterType="com.resume.api.entity.Experience" resultType="com.resume.api.vo.ExperienceAllVo">
     	SELECT * FROM tb_company c
         LEFT JOIN tb_company_experience ce ON c.id=ce.company_id
-        WHERE c.user_id=${userId}
+        WHERE c.user_id=#{userId}
         <if test="resumeId != null">
-            AND  c.resume_id=${resumeId}
+            AND  c.resume_id=#{resumeId}
         </if>
         <if test="id != null">
-            AND  c.id=${companyId}
+            AND  c.id=#{companyId}
         </if>
     </select>
 
