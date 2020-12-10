@@ -96,6 +96,6 @@ public class SchoolService {
     }
 
     public List<StudyLevel> findStudyLevelAll(){
-        return studyLevelMapper.selectList(new EntityWrapper<StudyLevel>());
+        return studyLevelMapper.selectList(new EntityWrapper<>());
     }
 }

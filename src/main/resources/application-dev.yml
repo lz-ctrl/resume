@@ -34,3 +34,6 @@ PDF:
   FONT: E:\\simhei.ttf
 file:
   img: E:\\
+WeiXin:
+  appId: wx370c238bee33c668
+  appSecret: 79306d329b2248f4ae6d6733311b27cd

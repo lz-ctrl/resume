@@ -17,6 +17,8 @@ public class UserDto {
     private String password;
     @ApiModelProperty("用户openId")
     private String openId;
+    @ApiModelProperty("用户code")
+    private String code;
     @ApiModelProperty("用户unionId")
     private String unionId;
     @ApiModelProperty("用户微信昵称")

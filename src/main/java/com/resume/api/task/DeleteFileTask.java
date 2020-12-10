@@ -1,20 +1,25 @@
 package com.resume.api.task;
 
 
+import com.alibaba.fastjson.JSONObject;
+import com.resume.api.utils.FileUtil;
+import com.resume.api.utils.HttpRequest;
+import lombok.extern.java.Log;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
-
-import java.io.File;
-import java.util.List;
-import java.util.concurrent.locks.Lock;
 
 /**
  * @author lz
  */
 @Configuration
 @EnableScheduling
+@Log
 public class DeleteFileTask {
+
+    private static final String APPID="wx370c238bee33c668";
+
+    private static final String SECRET="79306d329b2248f4ae6d6733311b27cd";
 
 //    每隔5秒执行一次：*/5 * * * * ?
 //
@@ -36,11 +41,29 @@ public class DeleteFileTask {
 
     /**
      * 添加定时任务
+     * 每天凌晨1点删除文件夹下所有内容
      */
     @Scheduled(cron = "0 0 1 * * ?")
     private void configureTasks() {
-        String path="/www/server/tomcat/webapps/office/";
+        String path="/www/server/tomcat/webapps/office";
+        String imgPath="/www/server/tomcat/webapps/img";
+        FileUtil.delAllFile(path);
+        FileUtil.delAllFile(imgPath);
+    }
 
+    //每六十分钟执行一次
 
+    @Scheduled(cron = "0 */60 * * * ?")
+    public void updateaccess_token() {
+        //获取access_token
+        String accessTokenUrl = "https://api.weixin.qq.com/cgi-bin/token";
+        String param="grant_type=client_credential&appid=APPID&secret=SECRET";
+        param = param.replace("APPID",  APPID);
+        param = param.replace("SECRET", SECRET);
+        //获取access_token
+        String accessTokenStr= HttpRequest.sendGet(accessTokenUrl, param);
+        JSONObject json=JSONObject.parseObject(accessTokenStr);
+        //RedisUtil redis=new RedisUtil(new RedisTemplate<>());
+        log.info("定时器任务>>>>>获取到的access_token为>>>>>>"+json.get("access_token"));
     }
 }
