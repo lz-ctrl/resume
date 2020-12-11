@@ -5,8 +5,10 @@ import com.resume.api.dao.EducationMapper;
 import com.resume.api.dao.ExperienceMapper;
 import com.resume.api.dao.ResumeMapper;
 import com.resume.api.dao.SchoolMapper;
+import com.resume.api.entity.Awards;
 import com.resume.api.entity.Education;
 import com.resume.api.entity.Experience;
+import com.resume.api.entity.Interest;
 import com.resume.api.entity.Resume;
 import com.resume.api.entity.School;
 import com.resume.api.exception.ServiceException;
@@ -32,13 +34,17 @@ public class HtmlService {
     private final ResumeMapper resumeMapper;
     private final ExperienceMapper experienceMapper;
     private final SchoolMapper schoolMapper;
-    private  final EducationMapper educationMapper;
+    private final EducationMapper educationMapper;
+    private final AwardsService awardsService;
+    private final InterestService interestService;
 
-    public HtmlService(ResumeMapper resumeMapper, ExperienceMapper experienceMapper, SchoolMapper schoolMapper, EducationMapper educationMapper) {
+    public HtmlService(ResumeMapper resumeMapper, ExperienceMapper experienceMapper, SchoolMapper schoolMapper, EducationMapper educationMapper, AwardsService awardsService, InterestService interestService) {
         this.resumeMapper = resumeMapper;
         this.experienceMapper = experienceMapper;
         this.schoolMapper = schoolMapper;
         this.educationMapper = educationMapper;
+        this.awardsService = awardsService;
+        this.interestService = interestService;
     }
 
     /**
@@ -83,67 +89,77 @@ public class HtmlService {
             stringHtml.append("<div style=\"width:40%; height: 120px; float: left;\">");
             stringHtml.append("<span style=\"font-size: 20px; font-weight: bold;\">言职青年</span><br /><br />");
             stringHtml.append("<span class=\"fonts\">"+resume.getPhone()+" 丨"+resume.getEmailWx()+" <br /><br />求职意向: "+resume.getExpect()+" 丨期望薪资: "+resume.getSalary()+"</span></div><br />");
-            stringHtml.append("<div style=\"height: 180px; float: right;\"><img style=\"width: 100px; height: 100px;\" src=\""+IMG+"\" /></div></div>");
-            stringHtml.append("<div class=\"jl\">");
-            stringHtml.append("<span class=\"fontb\">教育经历</span><hr />");
+            stringHtml.append("<div style=\"height: 180px; float: right;\"><img style=\"width: 100px; height: 100px;\" src=\""+resume.getHeadImg()+"\" /></div></div>");
             //这里是所在学校的DIV模块
             List<School> schoolList=schoolMapper.findByResumeIdLevel(resumeId);
-            schoolList.forEach(school -> {
-                String startTime=sdf.format(school.getStartTime());
-                String endTime=sdf.format(school.getEndTime());
-                stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+school.getName()+"</span><span class=\"fonts\"> - "+school.getMajor()+" "+school.getStudyLevelName()+"</span><div class=\"fontdate\" >"+startTime+" - "+endTime+"</div></div><br />");
-            });
-            stringHtml.append("</div>");
+            if(schoolList.size()>0){
+                stringHtml.append("<div class=\"jl\">");
+                stringHtml.append("<span class=\"fontb\">教育经历</span><hr />");
+                schoolList.forEach(school -> {
+                    String startTime=sdf.format(school.getStartTime());
+                    String endTime=sdf.format(school.getEndTime());
+                    stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+school.getName()+"</span><span class=\"fonts\"> - "+school.getMajor()+" "+school.getStudyLevelName()+"</span><div class=\"fontdate\" >"+startTime+" - "+endTime+"</div></div><br />");
+                });
+                stringHtml.append("</div>");
+            }
             //这里开始是工作经历DIV模块
             List<ExperienceAllVo> allVos=experienceMapper.findAll(new Experience().setResumeId(resumeId).setUserId(userId));
-            stringHtml.append("<div class=\"jl\">");
-            stringHtml.append("<span class=\"fontb\">工作经历</span><hr />");
-            allVos.forEach(experienceAllVo -> {
-                stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+experienceAllVo.getName()+"</span><span class=\"fonts\"> - "+experienceAllVo.getPost()+"</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
-                if(experienceAllVo.getContent()!=null&&!"".equals(experienceAllVo.getContent())) {
-                    stringHtml.append("<span class=\"fonth\">内容</span>");
-                    stringHtml.append("<ul style=\" font-size:9pt\">");
-                    stringHtml.append(experienceAllVo.getContent());
-                    stringHtml.append("</ul>");
-                }
-                if(experienceAllVo.getAchievement()!=null&&!"".equals(experienceAllVo.getAchievement())) {
-                    stringHtml.append("<span class=\"fonth\">业绩</span>");
-                    stringHtml.append("<ul style=\" font-size:9pt\">");
-                    stringHtml.append(experienceAllVo.getAchievement());
-                    stringHtml.append("</ul>");
-                }
-            });
-            stringHtml.append("</div>");
+            if(allVos.size()>0){
+                stringHtml.append("<div class=\"jl\">");
+                stringHtml.append("<span class=\"fontb\">工作经历</span><hr />");
+                allVos.forEach(experienceAllVo -> {
+                    stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+experienceAllVo.getName()+"</span><span class=\"fonts\"> - "+experienceAllVo.getPost()+"</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
+                    if(experienceAllVo.getContent()!=null&&!"".equals(experienceAllVo.getContent())) {
+                        stringHtml.append("<span class=\"fonth\">内容</span>");
+                        stringHtml.append("<ul style=\" font-size:9pt\">");
+                        stringHtml.append(experienceAllVo.getContent());
+                        stringHtml.append("</ul>");
+                    }
+                    if(experienceAllVo.getAchievement()!=null&&!"".equals(experienceAllVo.getAchievement())) {
+                        stringHtml.append("<span class=\"fonth\">业绩</span>");
+                        stringHtml.append("<ul style=\" font-size:9pt\">");
+                        stringHtml.append(experienceAllVo.getAchievement());
+                        stringHtml.append("</ul>");
+                    }
+                });
+                stringHtml.append("</div>");
+            }
             //这里开始是在校经历DIV模块
             List<Education> educationList=educationMapper.findAll(new Education().setResumeId(resumeId).setUserId(userId));
-            stringHtml.append("<div class=\"jl\"><br />");
-            stringHtml.append("<span class=\"fontb\">在校/其它经历</span><hr />");
-            educationList.forEach(education -> {
-                String startTime=sdf.format(education.getStartTime());
-                String endTime=sdf.format(education.getEndTime());
-                stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+education.getActivityName()+"</span><span class=\"fonts\"> - "+education.getActivityRole()+"</span><div class=\"fontdate\" >"+startTime+" - "+endTime+"</div></div><br />\n");
-                stringHtml.append("<ul style=\" font-size:9pt\">");
-                stringHtml.append(education.getContent());
-                stringHtml.append("</ul>");
-            });
-            stringHtml.append("</div>");
+            if(educationList.size()>0){
+                stringHtml.append("<div class=\"jl\"><br />");
+                stringHtml.append("<span class=\"fontb\">在校/其它经历</span><hr />");
+                educationList.forEach(education -> {
+                    String startTime=sdf.format(education.getStartTime());
+                    String endTime=sdf.format(education.getEndTime());
+                    stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+education.getActivityName()+"</span><span class=\"fonts\"> - "+education.getActivityRole()+"</span><div class=\"fontdate\" >"+startTime+" - "+endTime+"</div></div><br />\n");
+                    stringHtml.append("<ul style=\" font-size:9pt\">");
+                    stringHtml.append(education.getContent());
+                    stringHtml.append("</ul>");
+                });
+                stringHtml.append("</div>");
+            }
             //证书获奖的DIV块
-            if(resume.getAwards()!=null&&!"".equals(resume.getAwards())){
+            List<Awards> awardsList=awardsService.list(resumeId);
+            if(awardsList.size()>0){
                 stringHtml.append("<div class=\"jl\"><br />");
                 stringHtml.append("<span class=\"fontb\">证书/获奖</span><hr />");
-                stringHtml.append("<div class=\"jls\"><span class=\"fonts\">");
-                stringHtml.append(resume.getAwards());
-                stringHtml.append("</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />");
+                awardsList.forEach(awards -> {
+                    String startTime=sdf.format(awards.getStartTime());
+                    String endTime=sdf.format(awards.getEndTime());
+                    stringHtml.append("<div class=\"jls\"><span class=\"fonts\">"+awards.getContent()+"</span><div class=\"fontdate\" >"+startTime+" - "+endTime+"</div></div><br />\n");
+                });
                 stringHtml.append("</div>");
             }
             //兴趣爱好的DIV块
-            if(resume.getInterest()!=null&&!"".equals(resume.getInterest())){
-            stringHtml.append("<div class=\"jl\"><br />");
-            stringHtml.append("<span class=\"fontb\">个人兴趣爱好</span><hr />");
-            stringHtml.append("<div class=\"jls\"><span class=\"fonts\">");
-            stringHtml.append(resume.getInterest());
-            stringHtml.append("</span></div><br />");
-            stringHtml.append("</div>");
+            List<Interest> interestList=interestService.list(resumeId);
+            if(interestList.size()>0){
+                stringHtml.append("<div class=\"jl\"><br />");
+                stringHtml.append("<span class=\"fontb\">个人兴趣爱好</span><hr />");
+                interestList.forEach(interest -> {
+                    stringHtml.append("<div class=\"jls\"><span class=\"fonts\">"+interest.getContent()+"</span></div><br />");
+                });
+                stringHtml.append("</div>");
             }
             //HTML结尾
             stringHtml.append("</body></html>");

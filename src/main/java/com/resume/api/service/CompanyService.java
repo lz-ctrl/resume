@@ -4,11 +4,14 @@ import com.resume.api.codec.RestCode;
 import com.resume.api.dao.CompanyMapper;
 import com.resume.api.dto.CompanyDto;
 import com.resume.api.entity.Company;
+import com.resume.api.entity.Job;
+import com.resume.api.entity.Position;
 import com.resume.api.exception.ServiceException;
 import com.resume.api.utils.BeanUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author lz
@@ -77,5 +80,22 @@ public class CompanyService {
             throw new ServiceException(RestCode.BAD_REQUEST_403);
         }
         return companyMapper.deleteById(id);
+    }
+
+    /**
+     * 查询所有职位
+     * @return
+     */
+    public List<Position> findAllPosition(){
+        return companyMapper.findAllPosition();
+    }
+
+    /**
+     * 根据职位id查询所有子职位
+     * @param positionId
+     * @return
+     */
+    public List<Job> findListByPositionId(Integer positionId){
+        return companyMapper.findListByPositionId(positionId);
     }
 }

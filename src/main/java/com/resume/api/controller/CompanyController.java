@@ -3,6 +3,8 @@ package com.resume.api.controller;
 import com.resume.api.codec.RestApiResult;
 import com.resume.api.codec.RestCode;
 import com.resume.api.dto.CompanyDto;
+import com.resume.api.entity.Job;
+import com.resume.api.entity.Position;
 import com.resume.api.service.CompanyService;
 import com.resume.api.utils.BeanMapper;
 import com.resume.api.vo.CompanyVo;
@@ -18,6 +20,9 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lz
@@ -53,6 +58,18 @@ public class CompanyController {
     @GetMapping("{id}")
     public RestApiResult<CompanyVo> get(@PathVariable Integer id){
         return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(companyService.get(id), CompanyVo.class));
+    }
+
+    @ApiOperation(value = "获取所有职位信息",notes = "获取所有职位信息")
+    @GetMapping("position")
+    public RestApiResult<List<Position>> position(){
+        return new RestApiResult<>(RestCode.SUCCESS, companyService.findAllPosition());
+    }
+
+    @ApiOperation(value = "根据职位id获取职位子信息",notes = "根据职位id获取职位子信息")
+    @GetMapping("job/{id}")
+    public RestApiResult<List<Job>> job(@PathVariable Integer id){
+        return new RestApiResult<>(RestCode.SUCCESS, companyService.findListByPositionId(id));
     }
 
 }

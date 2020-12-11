@@ -58,7 +58,7 @@ public class AwardsController {
         return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(awardsService.get(id), AwardsVo.class));
     }
 
-    @ApiOperation(value = "根据简历ID查询获奖证书列表",notes = "根据简历ID查询获奖证书列表")
+    @ApiOperation(value = "根据简历id查询获奖证书列表",notes = "根据简历id查询获奖证书列表")
     @PostMapping("list")
     public RestApiResult<List<AwardsVo>> list(@RequestBody @Validated AwardsDto awardsDto) throws ServiceException {
         if(awardsDto==null||awardsDto.getResumeId()==null){

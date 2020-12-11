@@ -43,16 +43,16 @@ public class test {
 
     public static void main(String[] args) throws IOException {
 
-        /*Thumbnails.of("E://11122222.jpg")
+        Thumbnails.of("E://11122222.jpg")
                   .scale(0.1f)
                   .outputQuality(0.5f)
-                  .toFile("E://11111.jpg");*/
+                  .toFile("E://11111.jpg");
 
 
 
 
         //用于存储html字符串
-        StringBuilder stringHtml = new StringBuilder();
+      /*  StringBuilder stringHtml = new StringBuilder();
         System.out.println(IMG2);
         try{
             //打开/新建HTML文件
@@ -110,9 +110,14 @@ public class test {
             stringHtml.append("<div class=\"jl\"><br />");
             stringHtml.append("<span class=\"fontb\">证书/获奖</span><hr />");
             stringHtml.append("<div class=\"jls\"><span class=\"fonts\">CPA、CFA备考金融风险管理师（FRM）、英语（CET-6）</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
+            stringHtml.append("<div class=\"jls\"><span class=\"fonts\">CPA、CFA备考金融风险管理师（FRM）、英语（CET-6）</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
+            stringHtml.append("<div class=\"jls\"><span class=\"fonts\">CPA、CFA备考金融风险管理师（FRM）、英语（CET-6）</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
+
             stringHtml.append("</div>");
             stringHtml.append("<div class=\"jl\"><br />");
             stringHtml.append("<span class=\"fontb\">个人兴趣爱好</span><hr />");
+            stringHtml.append("<div class=\"jls\"><span class=\"fonts\">热爱写作、热爱篮球(校队长)</span></div><br />");
+            stringHtml.append("<div class=\"jls\"><span class=\"fonts\">热爱写作、热爱篮球(校队长)</span></div><br />");
             stringHtml.append("<div class=\"jls\"><span class=\"fonts\">热爱写作、热爱篮球(校队长)</span></div><br />");
             stringHtml.append("</div>");
             stringHtml.append("</body></html>");
@@ -120,10 +125,10 @@ public class test {
             printStream.println(stringHtml.toString());
 
             //这里把HTML转成WORD
-            PdfDocument pdf = new PdfDocument();
+            *//*PdfDocument pdf = new PdfDocument();
             pdf.loadFromFile(DEST);
             pdf.saveToFile("E://ToWord.docx", FileFormat.DOCX);
-
+*//*
 
             //这里把HTML转成PDF
             ITextRenderer render = new ITextRenderer();
@@ -142,6 +147,6 @@ public class test {
             e.printStackTrace();
         } catch (com.lowagie.text.DocumentException e) {
             e.printStackTrace();
-        }
+        }*/
     }
 }
