@@ -3,7 +3,7 @@ package com.resume.api.utils;
 /**
  * 进度原因临时加这个，后面可以从数据库加载，后台管理系统进行修改
  *
- * @author XiaoWeiBiao
+ * @author lz
  */
 public final class ConstantUtils {
 

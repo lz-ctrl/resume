@@ -14,6 +14,7 @@ import org.apache.pdfbox.text.PDFTextStripper;
 import org.apache.poi.poifs.filesystem.DirectoryEntry;
 import org.apache.poi.poifs.filesystem.DocumentEntry;
 import org.apache.poi.poifs.filesystem.POIFSFileSystem;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.util.ClassUtils;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
@@ -43,16 +44,16 @@ public class test {
 
     public static void main(String[] args) throws IOException {
 
-        Thumbnails.of("E://11122222.jpg")
+      /*  Thumbnails.of("E://11122222.jpg")
                   .scale(0.1f)
                   .outputQuality(0.5f)
-                  .toFile("E://11111.jpg");
+                  .toFile("E://11111.jpg");*/
 
 
 
 
         //用于存储html字符串
-      /*  StringBuilder stringHtml = new StringBuilder();
+        StringBuilder stringHtml = new StringBuilder();
         System.out.println(IMG2);
         try{
             //打开/新建HTML文件
@@ -84,10 +85,10 @@ public class test {
                 stringHtml.append("<li>对短视频领域进行深入行业研究，以查询公开数据、公司财报、用户寻访等方式，调研短视频市场和头部App运营情况，为商业银行创新业务板块寻找潜在突破机会，重点剖析中美共4家公司，整理为行业研究文档，并完成超过30页的幻灯片制作，被采纳成为最终递呈材料的组成部分</li>");
                 stringHtml.append("</ul>");
                 stringHtml.append("<span class=\"fonth\">业绩</span>");
-                stringHtml.append("<ul style=\" font-size:9pt\">");
-                stringHtml.append("<li>目标kpi绩效超额20%完成</li>");
+                stringHtml.append("<span style=\" font-size:9pt\">");
+                stringHtml.append("<ol><li>rose</li><li>lisa</li><li>jisoo</li><li>jennie</li><li>blackpink</li></ol>");
                 stringHtml.append("<li>通过咨询工作给公司带来非常大的收益</li>");
-                stringHtml.append("</ul>");
+                stringHtml.append("</span>");
             }
             stringHtml.append("</div>");
             stringHtml.append("<div class=\"jl\"><br />");
@@ -110,14 +111,10 @@ public class test {
             stringHtml.append("<div class=\"jl\"><br />");
             stringHtml.append("<span class=\"fontb\">证书/获奖</span><hr />");
             stringHtml.append("<div class=\"jls\"><span class=\"fonts\">CPA、CFA备考金融风险管理师（FRM）、英语（CET-6）</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
-            stringHtml.append("<div class=\"jls\"><span class=\"fonts\">CPA、CFA备考金融风险管理师（FRM）、英语（CET-6）</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
-            stringHtml.append("<div class=\"jls\"><span class=\"fonts\">CPA、CFA备考金融风险管理师（FRM）、英语（CET-6）</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
-
             stringHtml.append("</div>");
+
             stringHtml.append("<div class=\"jl\"><br />");
             stringHtml.append("<span class=\"fontb\">个人兴趣爱好</span><hr />");
-            stringHtml.append("<div class=\"jls\"><span class=\"fonts\">热爱写作、热爱篮球(校队长)</span></div><br />");
-            stringHtml.append("<div class=\"jls\"><span class=\"fonts\">热爱写作、热爱篮球(校队长)</span></div><br />");
             stringHtml.append("<div class=\"jls\"><span class=\"fonts\">热爱写作、热爱篮球(校队长)</span></div><br />");
             stringHtml.append("</div>");
             stringHtml.append("</body></html>");
@@ -125,10 +122,10 @@ public class test {
             printStream.println(stringHtml.toString());
 
             //这里把HTML转成WORD
-            *//*PdfDocument pdf = new PdfDocument();
+           /* PdfDocument pdf = new PdfDocument();
             pdf.loadFromFile(DEST);
-            pdf.saveToFile("E://ToWord.docx", FileFormat.DOCX);
-*//*
+            pdf.saveToFile("E://ToWord.docx", FileFormat.DOCX);*/
+
 
             //这里把HTML转成PDF
             ITextRenderer render = new ITextRenderer();
@@ -147,6 +144,6 @@ public class test {
             e.printStackTrace();
         } catch (com.lowagie.text.DocumentException e) {
             e.printStackTrace();
-        }*/
+        }
     }
 }

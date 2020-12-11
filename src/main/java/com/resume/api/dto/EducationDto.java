@@ -26,10 +26,10 @@ public class EducationDto {
     private Integer resumeId;
     @ApiModelProperty("所属学校id(新增必传)")
     private Integer schoolId;
-    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM-dd")
+    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM")
     @ApiModelProperty("经历开始时间")
     private Date startTime;
-    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM-dd")
+    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM")
     @ApiModelProperty("经历结束时间")
     private Date endTime;
 }

@@ -53,7 +53,7 @@ public class HtmlService {
     @Value("${PDF.HTML}")
     private String HTML;
 
-    private static final SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+    private static final SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM");
 
     /**
      * 测试用图片base64编码

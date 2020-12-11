@@ -52,21 +52,21 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         // super();
         super.setFilterProcessesUrl("/user/token");
         setAuthenticationManager(authenticationManager);
-
     }
 
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException {
-        // 从请求的 POST 中拿取 username 和 password 两个字段进行登入
-        String username = request.getParameter("username");
+        // 从请求的 POST 中拿取 code 和 password 两个字段进行登入
+        String code = request.getParameter("code");
+        // 小程序不需要密码，直接默认为123
         String password = request.getParameter("password");
         if (StringUtils.isBlank(password)) {
-            password = "";
+            password = "123";
         }
-
         UsernamePasswordAuthenticationToken token;
         try {
-            token = new UsernamePasswordAuthenticationToken(username, URLDecoder.decode(password, StandardCharsets.UTF_8.name()));
+            token = new UsernamePasswordAuthenticationToken(code, URLDecoder.decode(password, StandardCharsets.UTF_8.name()));
+            System.out.println(token);
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
             throw new ServiceException(RestCode.TOKEN_ERROR_506);
@@ -86,7 +86,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     /**
-     * 鉴权失败进行的操作，我们这里就返回 用户名或密码错误 的信息
+     * 鉴权失败进行的操作
      */
     @Override
     protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
@@ -94,9 +94,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     }
 
     private void handleResponse(HttpServletRequest request, HttpServletResponse response, Authentication authResult, AuthenticationException failed) throws IOException, ServletException {
-
         RestApiResult restApiResult;
         response.setHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
+        System.out.println(authResult);
         if (authResult != null) {
             restApiResult = new RestApiResult(RestCode.SUCCESS);
             // 处理登入成功请求
@@ -105,20 +105,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
             String token = ConstantUtils.TOKEN_PREFIX + JwtUtil.sign(user.getId(), user.getUsername(),
                                                                      user.getPassword(), expireDate, user.getAuthorities());
-            restApiResult.setMsg("登入成功");
+            restApiResult.setMsg("token获取成功");
             JSONObject jsonObject = new JSONObject();
             jsonObject.put("token", token);
+            jsonObject.put("token_time", expireDate);
             //TODO 可以添加更多返回信息
             restApiResult.setData(jsonObject);
         } else {
-            String username = request.getParameter("username");
-            String password = request.getParameter("password");
-            logger.info(String.format("login error username:%s,password:%s", username, password));
             restApiResult = new RestApiResult(RestCode.BAD_REQUEST_401);
             // 处理登入失败请求
             String failMsg = failed.getMessage();
             if (StringUtils.isBlank(failMsg) || failMsg.matches(ENG_REGEX)) {
-                failMsg = "账号或密码错误";
+                failMsg = "token获取失败";
             }
             restApiResult.setMsg(failMsg);
             restApiResult.setData(null);

@@ -45,6 +45,7 @@ public class ResumeService {
         Resume resume=new Resume();
         BeanUtil.copyProperties(resumeDto, resume);
         resume.setCreateTime(new Date());
+        resume.setName(resumeDto.getName()+"_"+resumeDto.getExpect()+"_个人简历");
         resumeMapper.insert(resume);
         return resume;
     }

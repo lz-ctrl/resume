@@ -1,5 +1,6 @@
 package com.resume.api.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -30,4 +31,16 @@ public class User {
     private String wxNum;
     private String email;
     private Date createTime;
+
+    /**
+     * 返回的token
+     */
+    @TableField(exist = false)
+    private String token;
+
+    /**
+     * token过期时间
+     */
+    @TableField(exist = false)
+    private Date tokenTime;
 }

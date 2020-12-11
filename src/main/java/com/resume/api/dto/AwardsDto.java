@@ -17,10 +17,10 @@ public class AwardsDto {
     private String content;
     private Integer userId;
     private Integer resumeId;
-    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM-dd")
+    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM")
     @ApiModelProperty("证书开始时间")
     private Date startTime;
-    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM-dd")
+    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM")
     @ApiModelProperty("证书结束时间")
     private Date endTime;
 }

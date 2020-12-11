@@ -16,6 +16,18 @@ spring:
     port: 6379
   thymeleaf: 
     prefix: classpath:/static/
+  freemarker:
+    allow-request-override: false
+    cache: true
+    check-template-location: true
+    charset: UTF-8
+    suffix: .html
+    templateEncoding: UTF-8
+    templateLoaderPath: E:\\
+    content-type: text/html
+    expose-request-attributes: false
+    expose-session-attributes: false
+    expose-spring-macro-helpers: false
 #spring 扫描实体类路径
 mybatis:
   type-aliases-package: com.resume.api.entity

@@ -30,7 +30,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author lz
@@ -89,6 +91,17 @@ public class ResumeController {
         return new RestApiResult<>(RestCode.SUCCESS, resumeService.uploadImage(file));
     }
 
+    @PostMapping("/exporttest")
+    public void exporttest() throws IOException, DocumentException {
+        Map<String,Object> data = new HashMap();
+        data.put("phone","123123213213213");
+        data.put("emailWx","OAWFEHIUEWAFHIAEWOUFHEAO");
+        data.put("expect","帅的丰富的");
+        data.put("salary","100000");
+        data.put("content","<ol><li>rose</li><li>lisa</li><li>jisoo</li><li>jennie</li><li>blackpink</li></ol>");
+        String content = JavaToPdfHtmlUtil.freeMarkerRender(data,"demo.html");
+        JavaToPdfHtmlUtil.CreatePDFRenderer(content,1);
+    }
 
     @ApiOperation(value = "导出简历",notes = "导出简历")
     @PostMapping("export")

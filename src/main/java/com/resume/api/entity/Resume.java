@@ -33,6 +33,7 @@ public class Resume {
     private String interest;
     private Integer userId;
     private Date createTime;
+    private String name;
 
     /**
      * 页数

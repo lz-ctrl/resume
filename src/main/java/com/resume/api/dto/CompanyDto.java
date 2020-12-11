@@ -17,10 +17,10 @@ public class CompanyDto {
     private String name;
     @ApiModelProperty("担任职务")
     private String post;
-    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM-dd")
+    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM")
     @ApiModelProperty("公司开始时间")
     private Date startTime;
-    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM-dd")
+    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM")
     @ApiModelProperty("公司结束时间")
     private Date endTime;
     @ApiModelProperty("简历id(新增必传)")

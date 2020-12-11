@@ -1,5 +1,6 @@
 package com.resume.api.vo;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Data;
 
@@ -29,4 +30,14 @@ public class UserVo {
     private String wxNum;
     @ApiModelProperty("用户邮箱")
     private String email;
+
+    /**
+     * 返回的token
+     */
+    private String token;
+
+    /**
+     * token过期时间
+     */
+    private Date tokenTime;
 }

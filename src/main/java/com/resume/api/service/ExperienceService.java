@@ -16,6 +16,8 @@ import com.resume.api.vo.ExperienceVo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.xml.crypto.Data;
+import java.util.Date;
 import java.util.List;
 
 
@@ -69,12 +71,14 @@ public class ExperienceService {
         //这里先插入公司信息
         Company company=new Company();
         BeanUtil.copyProperties(experienceAllDto, company);
+        company.setCreateTime(new Date());
         companyMapper.insert(company);
         //这里插入工作经历信息
         Experience experience=new Experience();
         BeanUtil.copyProperties(experienceAllDto, experience);
         //将新建的公司id插入到工作经历信息
         experience.setCompanyId(company.getId());
+        experience.setCreateTime(new Date());
         experienceMapper.insert(experience);
         //将信息返回
         CompanyExperienceVo companyExperienceVo=new CompanyExperienceVo();

@@ -35,9 +35,6 @@ public class EducationService {
         if(educationDto.getResumeId()==null){
             throw new ServiceException(RestCode.BAD_REQUEST_403, "简历id不能为空");
         }
-        if(educationDto.getSchoolId()==null){
-            throw new ServiceException(RestCode.BAD_REQUEST_403, "学校id不能为空");
-        }
         if(educationDto.getUserId()==null){
             throw new ServiceException(RestCode.BAD_REQUEST_403, "用户id不能为空");
         }

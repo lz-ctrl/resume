@@ -5,15 +5,23 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerFontProvider;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.xhtmlrenderer.pdf.ITextFontResolver;
 import org.xhtmlrenderer.pdf.ITextRenderer;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.StringWriter;
+import java.io.Writer;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * @author lz
@@ -37,6 +45,11 @@ public class JavaToPdfHtmlUtil {
     public void setFONT(String font){
         FONT=font;
     }
+
+
+    @Autowired
+    private static Configuration freemarkerCfg;
+
 
     /**
      * HTML转换为PDF 无高级CSS样式以及图片
@@ -93,9 +106,42 @@ public class JavaToPdfHtmlUtil {
         }
     }
 
+    /**
+     * freemarker渲染html
+     */
+    public static String freeMarkerRender(Map<String, Object> data, String htmlTmp) {
+        Writer out = new StringWriter();
+        try {
+            // 获取模板,并设置编码方式
+            freemarkerCfg =new Configuration();
+            Template template = freemarkerCfg.getTemplate(htmlTmp);
+            template.setEncoding("UTF-8");
+            // 合并数据模型与模板
+            //将合并后的数据和模板写入到流中，这里使用的字符流
+            template.process(data, out);
+            out.flush();
+            return out.toString();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                out.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return null;
+    }
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws IOException, com.lowagie.text.DocumentException {
+        Map<String,Object> data = new HashMap();
+        data.put("phone","123123213213213");
+        data.put("emailWx","OAWFEHIUEWAFHIAEWOUFHEAO");
+        data.put("expect","帅的丰富的");
+        data.put("salary","100000");
+        data.put("content","<ol><li>rose</li><li>lisa</li><li>jisoo</li><li>jennie</li><li>blackpink</li></ol>");
+        String content = JavaToPdfHtmlUtil.freeMarkerRender(data,"demo.html");
+        JavaToPdfHtmlUtil.CreatePDFRenderer(content,1);
 
     }
 }

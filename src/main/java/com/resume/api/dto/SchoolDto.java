@@ -17,10 +17,10 @@ public class SchoolDto {
     private String name;
     @ApiModelProperty("学校职务/干部")
     private String post;
-    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM-dd")
+    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM")
     @ApiModelProperty("在校开始时间")
     private Date startTime;
-    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM-dd")
+    @JsonFormat(timezone="GMT+8", pattern="yyyy-MM")
     @ApiModelProperty("在校结束时间")
     private Date endTime;
     @ApiModelProperty("专业名称")

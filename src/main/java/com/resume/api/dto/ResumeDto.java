@@ -33,6 +33,8 @@ public class ResumeDto {
     private String emailWx;
     @ApiModelProperty("电话")
     private String phone;
+    @ApiModelProperty("名字")
+    private String name;
 
     @ApiModelProperty("当前页")
     private Integer page;

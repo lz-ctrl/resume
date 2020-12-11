@@ -3,11 +3,12 @@ package com.resume.api.security;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collection;
 
 /**
- * @author XiaoWeiBiao
+ * @author lz
  * @version 1.0
  */
 public class SecurityUser extends User {
@@ -21,8 +22,6 @@ public class SecurityUser extends User {
         this.id = id;
 
     }
-
-
 
     public SecurityUser(String username, String password, Collection<? extends GrantedAuthority> authorities) {
         super(username, password, authorities);
