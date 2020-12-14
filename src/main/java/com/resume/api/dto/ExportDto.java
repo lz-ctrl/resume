@@ -14,4 +14,9 @@ public class ExportDto {
     private Integer userId;
     @ApiModelProperty("PDF PNG DOC")
     private String key;
+    @ApiModelProperty("是否导出为邮箱 填1为导出")
+    private Integer ifEmail;
+    @ApiModelProperty("邮箱号(导出到邮箱时必填)")
+    private String email;
+
 }

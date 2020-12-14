@@ -62,8 +62,8 @@ public class ExperienceController {
 
     @ApiOperation(value = "根据id查询工作经历",notes = "根据id查询工作经历")
     @GetMapping("{id}")
-    public RestApiResult<ExperienceVo> get(@PathVariable Integer id){
-        return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(experienceService.get(id), ExperienceVo.class));
+    public RestApiResult<ExperienceAllVo> get(@PathVariable Integer id){
+        return new RestApiResult<>(RestCode.SUCCESS, experienceService.get(id));
     }
 
     @ApiOperation(value = "根据简历id或者公司id查询工作经历list",notes = "根据简历id或者公司id查询工作经历list(用户id必传)")

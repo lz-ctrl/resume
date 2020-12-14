@@ -5,6 +5,8 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerFontProvider;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
+import freemarker.cache.FileTemplateLoader;
+import freemarker.cache.TemplateLoader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -69,7 +71,7 @@ public class JavaToPdfHtmlUtil {
         XMLWorkerFontProvider fontImp = new XMLWorkerFontProvider(XMLWorkerFontProvider.DONTLOOKFORFONTS);
         fontImp.register(FONT);
         //生成html文件名称
-        String htmlPath=HTML+OnlyStringUtil.OnlyStringUUId()+".html";
+        String htmlPath=DEST+OnlyStringUtil.OnlyStringUUId()+".html";
         XMLWorkerHelper.getInstance().parseXHtml(writer, document,
                                                  new FileInputStream(htmlPath), null, Charset.forName("UTF-8"), fontImp);
         // step 5
@@ -108,18 +110,24 @@ public class JavaToPdfHtmlUtil {
 
     /**
      * freemarker渲染html
+     * 使用HTML模板进行导出HTML操作
      */
     public static String freeMarkerRender(Map<String, Object> data, String htmlTmp) {
         Writer out = new StringWriter();
         try {
-            // 获取模板,并设置编码方式
+            // 获取HTML模板,并设置编码方式
             freemarkerCfg =new Configuration();
+            // 设置HTML模板路径
+            TemplateLoader templateLoader=new FileTemplateLoader(new File(HTML));
+            freemarkerCfg.setTemplateLoader(templateLoader);
             Template template = freemarkerCfg.getTemplate(htmlTmp);
             template.setEncoding("UTF-8");
             // 合并数据模型与模板
-            //将合并后的数据和模板写入到流中，这里使用的字符流
+            // 将合并后的数据和模板写入到流中，这里使用的字符流
             template.process(data, out);
+            String path=HTML+htmlTmp;
             out.flush();
+            System.out.println(HTML+htmlTmp);
             return out.toString();
         } catch (Exception e) {
             e.printStackTrace();

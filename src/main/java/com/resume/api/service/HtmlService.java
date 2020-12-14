@@ -50,8 +50,8 @@ public class HtmlService {
     /**
      *这里是HTML存放的路径
      */
-    @Value("${PDF.HTML}")
-    private String HTML;
+    @Value("${PDF.DEST}")
+    private String DEST;
 
     private static final SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM");
 
@@ -77,7 +77,7 @@ public class HtmlService {
         StringBuffer stringHtml = new StringBuffer();
         try{
             //打开/新建HTML文件
-            String HTML_URL=HTML+ OnlyStringUtil.OnlyStringDate()+"_html.html";
+            String HTML_URL=DEST+ OnlyStringUtil.OnlyStringDate()+"_html.html";
             PrintStream printStream = new PrintStream(HTML_URL);
             //写入HTML文件内容
             stringHtml.append("<!DOCTYPE html>");
@@ -145,9 +145,7 @@ public class HtmlService {
                 stringHtml.append("<div class=\"jl\"><br />");
                 stringHtml.append("<span class=\"fontb\">证书/获奖</span><hr />");
                 awardsList.forEach(awards -> {
-                    String startTime=sdf.format(awards.getStartTime());
-                    String endTime=sdf.format(awards.getEndTime());
-                    stringHtml.append("<div class=\"jls\"><span class=\"fonts\">"+awards.getContent()+"</span><div class=\"fontdate\" >"+startTime+" - "+endTime+"</div></div><br />\n");
+                    stringHtml.append("<div class=\"jls\"><span class=\"fonts\">"+awards.getContent()+"</span></div><br />\n");
                 });
                 stringHtml.append("</div>");
             }

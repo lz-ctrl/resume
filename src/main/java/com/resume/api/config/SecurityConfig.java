@@ -39,8 +39,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             // security 默认 csrf 是开启的，我们使用了 token ，这个也没有什么必要了
             .csrf().disable()
             .authorizeRequests()
-            // 默认所有请求通过，但是我们要在需要权限的方法加上安全注解，这样比写死配置灵活很多
-            .anyRequest().permitAll()
+            //这里放行登录跟获取token的接口
+            .antMatchers("/user/login").permitAll()
+            .antMatchers("/user/token").permitAll()
+            .anyRequest().authenticated()
             .and()
             // 添加自己编写的两个过滤器
             .addFilter(new JwtAuthenticationFilter(authenticationManager()))

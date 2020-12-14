@@ -37,7 +37,7 @@ mybatis-plus.configuration.log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
 #文件路径配置
 PDF:
   DEST: /www/server/tomcat/webapps/office/
-  HTML: /www/server/tomcat/webapps/office/
+  HTML: /www/server/tomcat/webapps/html/
   FONT: /www/wwwroot/font/simhei.ttf
 file:
   img: /www/server/tomcat/webapps/img/

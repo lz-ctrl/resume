@@ -1,5 +1,6 @@
 package com.resume.api.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -23,4 +24,10 @@ public class Template {
     private String name;
     private String content;
     private Date createTime;
+
+    /**
+     * 统计数量
+     */
+    @TableField(exist = false)
+    private Integer count;
 }

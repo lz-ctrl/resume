@@ -52,13 +52,14 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws IOException, ServletException {
         // 判断是否有 token，并且进行认证
         AuthenticationObj authenticationObj = getAuthentication(request);
-        if (authenticationObj.getRestApiResult() != null) {
+        String sendTypeHeader = request.getHeader("sendType");
+        /*if (authenticationObj.getRestApiResult() != null) {
             //认证失败
             response.setHeader(HttpHeaders.CONTENT_TYPE, ContentType.APPLICATION_JSON.toString());
             response.setStatus(HttpStatus.OK.value());
             response.getWriter().write(jsonMapper.toJson(authenticationObj.getRestApiResult()));
             return;
-        } else if (authenticationObj.getUsernamePasswordAuthToken() != null) {
+        } else*/ if (authenticationObj.getUsernamePasswordAuthToken() != null) {
             // 认证成功
             SecurityContextHolder.getContext().setAuthentication(authenticationObj.getUsernamePasswordAuthToken());
             chain.doFilter(request, response);

@@ -14,5 +14,11 @@
         </if>
     </select>
 
+    <select id="findById" parameterType="com.resume.api.entity.Experience" resultType="com.resume.api.vo.ExperienceAllVo">
+        SELECT * FROM tb_company c
+        LEFT JOIN tb_company_experience ce ON c.id=ce.company_id
+        WHERE ce.id=#{id}
+    </select>
+
 
 </mapper>

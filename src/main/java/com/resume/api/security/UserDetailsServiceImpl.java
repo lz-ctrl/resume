@@ -54,9 +54,9 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             throw new BadCredentialsException("code为空");
         }
         String openId= WxUtil.getOpenIdByCode(code);
-        if(openId==null){
+        /*if(openId==null){
             throw new BadCredentialsException("openId获取失败");
-        }
+        }*/
         User userEntity = userService.findUserByOpenId("123");
         if (userEntity == null) {
             throw new BadCredentialsException("账号不存在");
@@ -66,7 +66,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
          * 没有多级权限管理,直接为默认用户
          */
         linkedList.add(new SimpleGrantedAuthority(ROLE));
-        return new SecurityUser(userEntity.getId(), userEntity.getOpenId(), userEntity.getPassword(), linkedList);
+        return new SecurityUser(userEntity.getId(), code, userEntity.getPassword(), linkedList);
 
     }
 }

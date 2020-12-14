@@ -3,13 +3,20 @@ package com.resume.api.service;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.resume.api.codec.RestCode;
+import com.resume.api.dao.AwardsMapper;
+import com.resume.api.dao.EducationMapper;
+import com.resume.api.dao.InterestMapper;
 import com.resume.api.dao.ResumeMapper;
 import com.resume.api.dto.ResumeDto;
+import com.resume.api.entity.Awards;
+import com.resume.api.entity.Education;
+import com.resume.api.entity.Interest;
 import com.resume.api.entity.Resume;
 import com.resume.api.exception.ServiceException;
 import com.resume.api.utils.BeanUtil;
 import com.resume.api.utils.FileUtil;
 import com.resume.api.utils.ImgBase64Util;
+import com.resume.api.vo.IfResumeVo;
 import com.resume.api.vo.PageVo;
 import net.coobird.thumbnailator.Thumbnails;
 import org.springframework.stereotype.Service;
@@ -23,10 +30,16 @@ import java.util.Date;
 @Service
 public class ResumeService {
 
-    final ResumeMapper resumeMapper;
+    private final ResumeMapper resumeMapper;
+    private final EducationMapper educationMapper;
+    private final AwardsMapper awardsMapper;
+    private final InterestMapper interestMapper;
 
-    public ResumeService(ResumeMapper resumeMapper) {
+    public ResumeService(ResumeMapper resumeMapper, EducationMapper educationMapper, AwardsMapper awardsMapper, InterestMapper interestMapper) {
         this.resumeMapper = resumeMapper;
+        this.educationMapper = educationMapper;
+        this.awardsMapper = awardsMapper;
+        this.interestMapper = interestMapper;
     }
 
     public String getData(){
@@ -45,7 +58,7 @@ public class ResumeService {
         Resume resume=new Resume();
         BeanUtil.copyProperties(resumeDto, resume);
         resume.setCreateTime(new Date());
-        resume.setName(resumeDto.getName()+"_"+resumeDto.getExpect()+"_个人简历");
+        resume.setResumeName(resumeDto.getName()+"_"+resumeDto.getExpect()+"_个人简历");
         resumeMapper.insert(resume);
         return resume;
     }
@@ -61,6 +74,10 @@ public class ResumeService {
         }
         Resume resume=new Resume();
         BeanUtil.copyProperties(resumeDto, resume);
+        //如果没有修改简历名称,则自动给他生成简历名称
+        if(resumeDto.getResumeName()==null){
+            resume.setResumeName(resumeDto.getName()+"_"+resumeDto.getExpect()+"_个人简历");
+        }
         resumeMapper.updateById(resume);
         return resume;
     }
@@ -139,5 +156,26 @@ public class ResumeService {
             throw new ServiceException(RestCode.BAD_REQUEST_406);
         }
         return stringBuilder.toString();
+    }
+
+    /**
+     * 这里判断简历是否有未填写的信息
+     * @return
+     */
+    public IfResumeVo judgeResume(Integer resumeId){
+        IfResumeVo ifResumeVo=new IfResumeVo();
+        Resume resume=resumeMapper.selectById(resumeId);
+        if(resume==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_416,"简历信息不存在");
+        }
+        ifResumeVo.setIfHeadImg(resume.getHeadImg()==null?0:1);
+        ifResumeVo.setIfExpect(resume.getExpect()==null?0:1);
+        Integer educationCount=educationMapper.selectCount(new EntityWrapper<Education>().eq("resume_id",resumeId));
+        Integer awardsCount=awardsMapper.selectCount(new EntityWrapper<Awards>().eq("resume_id",resumeId));
+        Integer interest=interestMapper.selectCount(new EntityWrapper<Interest>().eq("resume_id", resumeId));
+        ifResumeVo.setIfEducation(educationCount<=0?0:1);
+        ifResumeVo.setIfAwards(awardsCount<=0?0:1);
+        ifResumeVo.setIfInterest(interest<=0?0:1);
+        return ifResumeVo;
     }
 }

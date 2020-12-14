@@ -1,5 +1,7 @@
 package com.resume.api.utils;
 
+import com.sun.mail.util.MailSSLSocketFactory;
+
 import javax.mail.*;
 import javax.mail.internet.*;
 
@@ -15,89 +17,63 @@ public class EmailUtil {
 
     Transport transport=null;
 
-    /**   * 发送邮件
-
-     * @param smtp服务器  例:smtp.exmail.qq.com
-
-     * @param 用户名
-
-     * @param 密码
-
-     * @param 发件人邮箱地址
-
-     * @param 收信人邮箱地址
-
-     * @param 邮件标题
-
-     * @param 邮件正文
-
-     * @param 附件地址
-
+    /**
+     * QQ邮箱调用接口
+     * @param to 收件人邮箱
+     * @param title 邮件标题
+     * @param content 邮件内容
+     * @param fileName 附加文件地址
+     * @throws Exception
      */
-
-    public boolean sendMail(String smtpServer, String name, String password,    String meMail, String toMail, String mailTitle, String mailText,String fileName) {
-        long begin=System.currentTimeMillis();
-        // 设置smtp服务器
+    public static void sendMail(String to,String title,String content, String fileName) throws Exception{
+        //设置发送邮件的主机  smtp.qq.com
+        String host = "smtp.qq.com";
+        //1.创建连接对象，连接到邮箱服务器
         Properties props = System.getProperties();
-        // 现在的大部分smpt都需要验证了
-        props.setProperty("mail.smtp.host", smtpServer);
+        //Properties 用来设置服务器地址，主机名 。。 可以省略
+        //设置邮件服务器
+        props.setProperty("mail.smtp.host", host);
         props.put("mail.smtp.auth", "true");
-        // 为了查看运行时的信息
-        Session s = Session.getInstance(props);
-        // 由邮件会话新建一个消息对象
-        MimeMessage message = new MimeMessage(s);
+        //SSL加密
+        MailSSLSocketFactory sf = new MailSSLSocketFactory();
+        sf.setTrustAllHosts(true);
+        props.put("mail.smtp.ssl.enable","true");
+        props.put("mail.smtp.ssl.socketFactory", sf);
+        //props：用来设置服务器地址，主机名；Authenticator：认证信息
+        Session session = Session.getDefaultInstance(props,new Authenticator() {
+            @Override
+            //通过密码认证信息
+            protected PasswordAuthentication getPasswordAuthentication() {
+                //这个用户名密码就可以登录到邮箱服务器了,用它给别人发送邮件
+                return new PasswordAuthentication("312462719@qq.com","kgbhmdktgndfbhga");
+            }
+        });
         try {
-            // 发件人
-            InternetAddress from = new InternetAddress(meMail);
-            message.setFrom(from);
-            // 收件人
-            InternetAddress to = new InternetAddress(toMail);
-            message.setRecipient(Message.RecipientType.TO, to);
-            // 邮件标题
-            message.setSubject(mailTitle);
-            // String content = "测试内容";
-            // 邮件内容,也可以使纯文本"text/plain"
-            // message.setContent(content, "text/html;charset=GBK");
-            // 下面代码是发送附件
-            // String fileName = "d://hello.txt";
-            MimeBodyPart messageBodyPart = new MimeBodyPart();
-            messageBodyPart.setText(mailText);
-            Multipart multipart = new MimeMultipart();
-            multipart.addBodyPart(messageBodyPart);
-            messageBodyPart = new MimeBodyPart();
-            //上传文件
+            Message message = new MimeMessage(session);
+            //1设置发件人：
+            message.setFrom(new InternetAddress("312462719@qq.com"));
+            //2设置收件人 这个TO就是收件人
+            message.setRecipient(MimeMessage.RecipientType.TO, new InternetAddress(to));
+            //3邮件的主题
+            message.setSubject(title);
+            //4设置邮件的正文 第一个参数是邮件的正文内容 第二个参数是：是文本还是html的连接
+            message.setContent(content, "text/html;charset=UTF-8");
             if (null != fileName) {
                 DataSource source = new FileDataSource(fileName);
-                messageBodyPart.setDataHandler(new DataHandler(source));
-                messageBodyPart.setFileName(fileName.substring(fileName.lastIndexOf("/")+1));
-                multipart.addBodyPart(messageBodyPart);
-
+                message.setDataHandler(new DataHandler(source));
+                message.setFileName(fileName.substring(fileName.lastIndexOf("/")+1));
             }
-            message.setContent(multipart);
-            message.saveChanges();
-            // smtp验证，就是你用来发邮件的邮箱用户名密码
-            transport = s.getTransport("smtp");
-            // 发送
-            transport.connect(smtpServer, name, password);
-            transport.sendMessage(message, message.getAllRecipients());
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }finally{
-            try {
-                transport.close();
-            } catch (MessagingException e) {
-                e.printStackTrace();
-            }
+            //3.发送一封激活邮件
+            Transport.send(message);
+        }catch(MessagingException mex){
+            mex.printStackTrace();
         }
-
-        return false;
-
     }
 
-    public static void main(String[] args) {
 
-        EmailUtil mail = new EmailUtil();
-        mail.sendMail("smtp.exmail.qq.com", "674039309@qq.com", "acxvhawzgpwlbcbd", "674039309@qq.com", "312462719@qq.com", "标题", "内容","E://demo.html");
+
+    public static void main(String[] args) throws Exception {
+        EmailUtil.sendMail("312462719@qq.com","言职青年","您的PDF文件已经生成","E://1000000229100586.pdf");
+        //mail.sendMail("smtp.exmail.qq.com", "312462719@qq.com", "kgbhmdktgndfbhga", "312462719@qq.com", "674039309@qq.com", "标题", "内容","E://demo.html");
     }
 }

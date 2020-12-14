@@ -9,10 +9,13 @@ import com.resume.api.exception.ServiceException;
 import com.resume.api.service.HtmlService;
 import com.resume.api.service.ResumeService;
 import com.resume.api.utils.BeanMapper;
+import com.resume.api.utils.EmailUtil;
 import com.resume.api.utils.JavaToPdfHtmlUtil;
 import com.resume.api.utils.PdfToImageUtil;
 import com.resume.api.utils.SpireUtil;
+import com.resume.api.utils.ZipUtils;
 import com.resume.api.vo.ExportVo;
+import com.resume.api.vo.IfResumeVo;
 import com.resume.api.vo.PageVo;
 import com.resume.api.vo.ResumeVo;
 import io.swagger.annotations.Api;
@@ -80,32 +83,15 @@ public class ResumeController {
         return new RestApiResult<>(RestCode.SUCCESS, resumeService.page(resumeDto));
     }
 
-    /**
-     * 上传图片/上传视频
-     * @param file
-     * @return
-     */
     @ApiOperation(value = "头像上传",notes = "头像上传")
     @PostMapping("/img")
     public RestApiResult<String> uploadImage(@RequestParam("file") MultipartFile file) {
         return new RestApiResult<>(RestCode.SUCCESS, resumeService.uploadImage(file));
     }
 
-    @PostMapping("/exporttest")
-    public void exporttest() throws IOException, DocumentException {
-        Map<String,Object> data = new HashMap();
-        data.put("phone","123123213213213");
-        data.put("emailWx","OAWFEHIUEWAFHIAEWOUFHEAO");
-        data.put("expect","帅的丰富的");
-        data.put("salary","100000");
-        data.put("content","<ol><li>rose</li><li>lisa</li><li>jisoo</li><li>jennie</li><li>blackpink</li></ol>");
-        String content = JavaToPdfHtmlUtil.freeMarkerRender(data,"demo.html");
-        JavaToPdfHtmlUtil.CreatePDFRenderer(content,1);
-    }
-
     @ApiOperation(value = "导出简历",notes = "导出简历")
     @PostMapping("export")
-    public RestApiResult<ExportVo> exportResume(@RequestBody ExportDto exportDto) throws IOException, DocumentException {
+    public RestApiResult exportResume(@RequestBody ExportDto exportDto) throws Exception {
         Integer userId=exportDto.getUserId();
         Integer resumeId=exportDto.getResumeId();
         String key=exportDto.getKey();
@@ -116,37 +102,83 @@ public class ResumeController {
         if(userId==null){
             throw new ServiceException(RestCode.BAD_REQUEST_403,"用户id不能为空");
         }
+        if(exportDto.getIfEmail()!=null&&exportDto.getIfEmail()==1&&exportDto.getEmail()==null){
+            throw new ServiceException(RestCode.BAD_REQUEST_408,"请填入邮箱号");
+        }
         //用来存储路径的
         String path="";
         //存储HTML信息
         String stringHtml="";
-        //最终返回VC
+        //最终返回Vo
         ExportVo exportVo=new ExportVo();
         switch(key){
             case "PDF":
                 //表示导出PDF
                 stringHtml = htmlService.firstHtml(resumeId,userId);
-                path= JavaToPdfHtmlUtil.CreatePDFRenderer(stringHtml,0);
-                exportVo.setPath(path);
+                if(exportDto.getIfEmail()!=null&&exportDto.getIfEmail()==1){
+                    //为1表示为发送邮件 调用邮件发送接口
+                    path= JavaToPdfHtmlUtil.CreatePDFRenderer(stringHtml,1);
+                    EmailUtil.sendMail(exportDto.getEmail(), "言职青年", "您的PDF文件已经生成", path);
+                }else{
+                    path= JavaToPdfHtmlUtil.CreatePDFRenderer(stringHtml,0);
+                    exportVo.setPath(path);
+                }
                 break;
             case "PNG":
                 //表示导出图片
                 stringHtml = htmlService.firstHtml(resumeId,userId);
                 path= JavaToPdfHtmlUtil.CreatePDFRenderer(stringHtml,1);
-                List<String> list= PdfToImageUtil.pdfToImageList(path);
-                exportVo.setImgPath(list);
+                if(exportDto.getIfEmail()!=null&&exportDto.getIfEmail()==1){
+                    List<String> list= PdfToImageUtil.pdfToImageList(path,1);
+                    //这里导出图片因为可能有多张图片,所以必须先压缩再发送邮件
+                    path=ZipUtils.createZipAndReturnPath(list);
+                    EmailUtil.sendMail(exportDto.getEmail(), "言职青年", "您的PDF文件已经生成", path);
+                }else{
+                    List<String> list= PdfToImageUtil.pdfToImageList(path,0);
+                    exportVo.setImgPath(list);
+                }
                 break;
             case "DOC":
                 //表示导出word文档
                 stringHtml = htmlService.firstHtml(resumeId,userId);
                 path= JavaToPdfHtmlUtil.CreatePDFRenderer(stringHtml,1);
-                path= SpireUtil.PDFToWord(path);
-                exportVo.setPath(path);
+                if(exportDto.getIfEmail()!=null&&exportDto.getIfEmail()==1){
+                    path= SpireUtil.PDFToWord(path,1);
+                    EmailUtil.sendMail(exportDto.getEmail(), "言职青年", "您的PDF文件已经生成", path);
+                }else {
+                    path= SpireUtil.PDFToWord(path,0);
+                    exportVo.setPath(path);
+                }
                 break;
             default:
                 throw new ServiceException(RestCode.BAD_REQUEST_408);
         }
-        return new RestApiResult<>(RestCode.SUCCESS,exportVo);
+        if(exportDto.getIfEmail()!=null&&exportDto.getIfEmail()==1){
+            return new RestApiResult<>(RestCode.SUCCESS,"邮件发送成功!");
+        }else{
+            return new RestApiResult<>(RestCode.SUCCESS,exportVo);
+        }
+    }
+
+
+    @ApiOperation(value = "根据id查询简历未填信息",notes = "根据id查询简历未填信息")
+    @GetMapping("judge/{id}")
+    public  RestApiResult<IfResumeVo> judgeResume(@PathVariable Integer id){
+        return new RestApiResult<>(RestCode.SUCCESS,resumeService.judgeResume(id)) ;
+    }
+
+
+
+    @PostMapping("/export2.0")
+    public void export() throws IOException, DocumentException {
+        Map<String,Object> data = new HashMap();
+        data.put("phone","123123213213213");
+        data.put("emailWx","OAWFEHIUEWAFHIAEWOUFHEAO");
+        data.put("expect","帅的丰富的");
+        data.put("salary","100000");
+        data.put("content","<ol><li>rose</li><li>lisa</li><li>jisoo</li><li>jennie</li><li>blackpink</li></ol>");
+        String content = JavaToPdfHtmlUtil.freeMarkerRender(data,"demo.html");
+        JavaToPdfHtmlUtil.CreatePDFRenderer(content,1);
     }
 
 }

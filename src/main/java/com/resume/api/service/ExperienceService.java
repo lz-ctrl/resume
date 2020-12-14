@@ -119,12 +119,12 @@ public class ExperienceService {
      * @param id
      * @return
      */
-    public Experience get(Integer id){
+    public ExperienceAllVo get(Integer id){
         if(id==null){
             throw new ServiceException(RestCode.BAD_REQUEST_403);
         }
-        Experience experience= experienceMapper.selectById(id);
-        return experience;
+        ExperienceAllVo experienceAllVo= experienceMapper.findById(id);
+        return experienceAllVo;
     }
 
     /**

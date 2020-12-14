@@ -2,9 +2,11 @@ package com.resume.api.task;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.resume.api.dao.UserMapper;
 import com.resume.api.utils.FileUtil;
 import com.resume.api.utils.HttpRequest;
 import lombok.extern.java.Log;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -16,6 +18,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 @EnableScheduling
 @Log
 public class DeleteFileTask {
+
+    @Autowired
+    UserMapper userMapper;
 
     private static final String APPID="wx370c238bee33c668";
 
@@ -63,7 +68,7 @@ public class DeleteFileTask {
         //获取access_token
         String accessTokenStr= HttpRequest.sendGet(accessTokenUrl, param);
         JSONObject json=JSONObject.parseObject(accessTokenStr);
-        //RedisUtil redis=new RedisUtil(new RedisTemplate<>());
         log.info("定时器任务>>>>>获取到的access_token为>>>>>>"+json.get("access_token"));
+        userMapper.updateWxKey(json.get("access_token").toString());
     }
 }

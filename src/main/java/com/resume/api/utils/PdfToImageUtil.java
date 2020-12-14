@@ -47,7 +47,7 @@ public class PdfToImageUtil {
      * @return 图片路径list
      * @throws IOException
      */
-    public static List<String> pdfToImageList(String filePath ) throws IOException {
+    public static List<String> pdfToImageList(String filePath ,Integer key) throws IOException {
         File file=new File(filePath);
         PDDocument pdDocument = PDDocument.load(file);
         int pageCount = pdDocument.getNumberOfPages();
@@ -63,7 +63,11 @@ public class PdfToImageUtil {
             ImageIO.write(image, IMG_TYPE, new File(IMG+fileName));
             //TODO 正式服务器需要拼接域名下载地址
             String imgPath="http://47.112.187.145:8080/img/"+fileName;
-            imagePathList.add(imgPath);
+            if(key==0){
+                imagePathList.add(imgPath);
+            }else{
+                imagePathList.add(IMG+fileName);
+            }
         }
         pdDocument.close();
         return imagePathList;
@@ -71,7 +75,7 @@ public class PdfToImageUtil {
 
     public static void main(String[] args) throws IOException {
        // File file = new File("E:\\test2.pdf");
-        List<String> stringList=pdfToImageList("E:\\HelloWorld_CN_HTML.pdf");
+        List<String> stringList=pdfToImageList("E:\\HelloWorld_CN_HTML.pdf",1);
         System.out.println(stringList.get(0)+"==============="+stringList.size());
         //return imagePathList;
     }

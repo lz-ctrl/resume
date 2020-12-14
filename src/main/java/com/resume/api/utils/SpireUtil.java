@@ -21,7 +21,7 @@ public class SpireUtil {
      * @param fileString
      * @return
      */
-    public static String PDFToWord(String fileString){
+    public static String PDFToWord(String fileString,Integer key){
         //这里转成WORD
         PdfDocument pdf = new PdfDocument();
         pdf.loadFromFile(fileString);
@@ -30,6 +30,10 @@ public class SpireUtil {
         pdf.saveToFile(path, FileFormat.DOCX);
         //TODO 正式服务器需要拼接域名下载地址
         String resultPath="http://47.112.187.145:8080/office/"+fileName;
-        return resultPath;
+        if(key==0){
+            return resultPath;
+        }else{
+            return path;
+        }
     }
 }

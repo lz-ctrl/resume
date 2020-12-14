@@ -7,4 +7,8 @@
 		where open_id = #{openId}
     </select>
 
+    <update id="updateWxKey" parameterType="String">
+          update sys_wx_key set wx_key=#{wxKey} WHERE id=1
+    </update>
+
 </mapper>

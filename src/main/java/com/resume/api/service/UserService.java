@@ -63,7 +63,6 @@ public class UserService {
         }else{
             //代表用户存在，返回用户
             user=userMapper.selectList(new EntityWrapper<User>().eq("open_id",user.getOpenId())).get(0);
-
         }
         //生成token返回给前端
         LinkedList<GrantedAuthority> linkedList = new LinkedList<>();
