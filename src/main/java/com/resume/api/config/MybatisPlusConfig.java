@@ -1,4 +1,4 @@
-package com.resume.api.codec;
+package com.resume.api.config;
 
 
 import com.baomidou.mybatisplus.mapper.ISqlInjector;
@@ -11,6 +11,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+/**
+ * @author lz
+ */
 @EnableTransactionManagement
 @Configuration
 @MapperScan("com.suyuan.api.dao")

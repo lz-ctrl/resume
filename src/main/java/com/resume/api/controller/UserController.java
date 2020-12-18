@@ -29,7 +29,7 @@ public class UserController {
     @Autowired
     UserService userService;
 
-    @ApiOperation(value = "用户登录注册", notes = "用户不存在则注册(openId必传)")
+    @ApiOperation(value = "用户登录注册", notes = "用户不存在则注册(code必传)")
     @PostMapping("/login")
     public RestApiResult<UserVo> userLogin(@RequestBody @Validated UserDto userDto) {
         return new RestApiResult<>(RestCode.SUCCESS, BeanMapper.map(userService.userLogin(userDto), UserVo.class));

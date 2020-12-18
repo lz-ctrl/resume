@@ -22,7 +22,8 @@ spring:
 logging:
   pattern:
     console: "%d - %msg%n"
-  file: /www/wwwroot/logs/dh-resume.log
+  file:
+    name: /www/wwwroot/logs/dh-resume.log
 #spring 扫描实体类路径
 mybatis:
   type-aliases-package: com.resume.api.entity

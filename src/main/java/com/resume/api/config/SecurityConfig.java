@@ -42,7 +42,16 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             //这里放行登录跟获取token的接口
             .antMatchers("/user/login").permitAll()
             .antMatchers("/user/token").permitAll()
-            .anyRequest().authenticated()
+            //放行swagger3资源
+            .antMatchers("/swagger-ui.html").permitAll()
+            .antMatchers("/swagger-resources/**").permitAll()
+            .antMatchers("/images/**").permitAll()
+            .antMatchers("/webjars/**").permitAll()
+            .antMatchers("/v3/api-docs").permitAll()
+            .antMatchers("/configuration/ui").permitAll()
+            .antMatchers("/configuration/security").permitAll()
+            .antMatchers("/swagger-ui/**").permitAll()
+            .anyRequest().permitAll()
             .and()
             // 添加自己编写的两个过滤器
             .addFilter(new JwtAuthenticationFilter(authenticationManager()))

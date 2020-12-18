@@ -5,13 +5,17 @@ import com.baomidou.mybatisplus.plugins.Page;
 import com.resume.api.codec.RestCode;
 import com.resume.api.dao.AwardsMapper;
 import com.resume.api.dao.EducationMapper;
+import com.resume.api.dao.ExperienceMapper;
 import com.resume.api.dao.InterestMapper;
 import com.resume.api.dao.ResumeMapper;
+import com.resume.api.dao.SchoolMapper;
 import com.resume.api.dto.ResumeDto;
 import com.resume.api.entity.Awards;
 import com.resume.api.entity.Education;
+import com.resume.api.entity.Experience;
 import com.resume.api.entity.Interest;
 import com.resume.api.entity.Resume;
+import com.resume.api.entity.School;
 import com.resume.api.exception.ServiceException;
 import com.resume.api.utils.BeanUtil;
 import com.resume.api.utils.FileUtil;
@@ -34,17 +38,23 @@ public class ResumeService {
     private final EducationMapper educationMapper;
     private final AwardsMapper awardsMapper;
     private final InterestMapper interestMapper;
+    private final SchoolMapper schoolMapper;
+    private final ExperienceMapper experienceMapper;
 
-    public ResumeService(ResumeMapper resumeMapper, EducationMapper educationMapper, AwardsMapper awardsMapper, InterestMapper interestMapper) {
+    public ResumeService(ResumeMapper resumeMapper, EducationMapper educationMapper, AwardsMapper awardsMapper, InterestMapper interestMapper, SchoolMapper schoolMapper, ExperienceMapper experienceMapper) {
         this.resumeMapper = resumeMapper;
         this.educationMapper = educationMapper;
         this.awardsMapper = awardsMapper;
         this.interestMapper = interestMapper;
+        this.schoolMapper = schoolMapper;
+        this.experienceMapper = experienceMapper;
     }
 
     public String getData(){
         return null;
     }
+
+    private final String RESUME_NAME="null_null_个人简历";
 
     /**
      * 新增简历
@@ -75,7 +85,8 @@ public class ResumeService {
         Resume resume=new Resume();
         BeanUtil.copyProperties(resumeDto, resume);
         //如果没有修改简历名称,则自动给他生成简历名称
-        if(resumeDto.getResumeName()==null){
+        String resumeName=resumeMapper.selectById(resumeDto.getId()).getResumeName();
+        if(resumeDto.getResumeName()==null&&resumeName.equals(RESUME_NAME)){
             resume.setResumeName(resumeDto.getName()+"_"+resumeDto.getExpect()+"_个人简历");
         }
         resumeMapper.updateById(resume);
@@ -170,12 +181,18 @@ public class ResumeService {
         }
         ifResumeVo.setIfHeadImg(resume.getHeadImg()==null?0:1);
         ifResumeVo.setIfExpect(resume.getExpect()==null?0:1);
+        ifResumeVo.setIfUser(resume.getName()==null?0:1);
+        //统计出该简历的其他信息
         Integer educationCount=educationMapper.selectCount(new EntityWrapper<Education>().eq("resume_id",resumeId));
         Integer awardsCount=awardsMapper.selectCount(new EntityWrapper<Awards>().eq("resume_id",resumeId));
-        Integer interest=interestMapper.selectCount(new EntityWrapper<Interest>().eq("resume_id", resumeId));
+        Integer interestCount=interestMapper.selectCount(new EntityWrapper<Interest>().eq("resume_id", resumeId));
+        Integer schoolCount=schoolMapper.selectCount(new EntityWrapper<School>().eq("resume_id", resumeId));
+        Integer experienceCount=experienceMapper.selectCount(new EntityWrapper<Experience>().eq("resume_id", resumeId));
         ifResumeVo.setIfEducation(educationCount<=0?0:1);
         ifResumeVo.setIfAwards(awardsCount<=0?0:1);
-        ifResumeVo.setIfInterest(interest<=0?0:1);
+        ifResumeVo.setIfInterest(interestCount<=0?0:1);
+        ifResumeVo.setIfSchool(schoolCount<=0?0:1);
+        ifResumeVo.setIfExperience(experienceCount<=0?0:1);
         return ifResumeVo;
     }
 }

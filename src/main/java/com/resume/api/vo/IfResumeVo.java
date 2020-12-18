@@ -9,6 +9,12 @@ import lombok.Data;
  */
 @Data
 public class IfResumeVo {
+    @ApiModelProperty("用户信息 0未填写 1已填写")
+    private Integer ifUser;
+    @ApiModelProperty("教育信息 0未填写 1已填写")
+    private Integer ifSchool;
+    @ApiModelProperty("工作经历 0未填写 1已填写")
+    private Integer ifExperience;
     @ApiModelProperty("头像 0未填写 1已填写")
     private Integer ifHeadImg;
     @ApiModelProperty("求职期望 0未填写 1已填写")
