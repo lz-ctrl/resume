@@ -75,6 +75,7 @@ public class HtmlService {
         }
         //用于存储html字符串
         StringBuffer stringHtml = new StringBuffer();
+        String stringHtmlS="";
         try{
             //打开/新建HTML文件
             String HTML_URL=DEST+ OnlyStringUtil.OnlyStringDate()+"_html.html";
@@ -87,8 +88,16 @@ public class HtmlService {
             stringHtml.append("</style></head><body>");
             stringHtml.append("<div style=\"width: 100%; height: 165px; margin: auto;\">");
             stringHtml.append("<div style=\"width:40%; height: 120px; float: left;\">");
-            stringHtml.append("<span style=\"font-size: 20px; font-weight: bold;\">言职青年</span><br /><br />");
-            stringHtml.append("<span class=\"fonts\">"+resume.getPhone()+" 丨"+resume.getEmailWx()+" <br /><br />求职意向: "+resume.getExpect()+" 丨期望薪资: "+resume.getSalary()+"</span></div><br />");
+            stringHtml.append("<span style=\"font-size: 20px; font-weight: bold;\">"+resume.getName()+"</span><br /><br />");
+            stringHtml.append("<span class=\"fonts\">"+resume.getPhone()+" 丨"+resume.getEmailWx()+" <br /><br />");
+            if(resume.getExpect()!=null){
+                stringHtml.append("求职意向: "+resume.getExpect());
+            }
+            if(resume.getSalary()!=null){
+                stringHtml.append( "丨期望薪资: "+resume.getSalary());
+            }
+            stringHtml.append("求职意向: "+resume.getExpect()+" 丨 期望薪资: "+resume.getSalary());
+            stringHtml.append("</span></div><br />");
             stringHtml.append("<div style=\"height: 180px; float: right;\"><img style=\"width: 100px; height: 100px;\" src=\""+resume.getHeadImg()+"\" /></div></div>");
             //这里是所在学校的DIV模块
             List<School> schoolList=schoolMapper.findByResumeIdLevel(resumeId);
@@ -111,15 +120,15 @@ public class HtmlService {
                     stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+experienceAllVo.getName()+"</span><span class=\"fonts\"> - "+experienceAllVo.getPost()+"</span><div class=\"fontdate\" >2018.10 - 2019.06</div></div><br />\n");
                     if(experienceAllVo.getContent()!=null&&!"".equals(experienceAllVo.getContent())) {
                         stringHtml.append("<span class=\"fonth\">内容</span>");
-                        stringHtml.append("<ul style=\" font-size:9pt\">");
+                        stringHtml.append("<span style=\" font-size:9pt\">");
                         stringHtml.append(experienceAllVo.getContent());
-                        stringHtml.append("</ul>");
+                        stringHtml.append("</span>");
                     }
                     if(experienceAllVo.getAchievement()!=null&&!"".equals(experienceAllVo.getAchievement())) {
                         stringHtml.append("<span class=\"fonth\">业绩</span>");
-                        stringHtml.append("<ul style=\" font-size:9pt\">");
+                        stringHtml.append("<span style=\" font-size:9pt\">");
                         stringHtml.append(experienceAllVo.getAchievement());
-                        stringHtml.append("</ul>");
+                        stringHtml.append("</span>");
                     }
                 });
                 stringHtml.append("</div>");
@@ -133,9 +142,9 @@ public class HtmlService {
                     String startTime=sdf.format(education.getStartTime());
                     String endTime=sdf.format(education.getEndTime());
                     stringHtml.append("<div class=\"jls\"><span class=\"fonth\">"+education.getActivityName()+"</span><span class=\"fonts\"> - "+education.getActivityRole()+"</span><div class=\"fontdate\" >"+startTime+" - "+endTime+"</div></div><br />\n");
-                    stringHtml.append("<ul style=\" font-size:9pt\">");
+                    stringHtml.append("<span style=\" font-size:9pt\">");
                     stringHtml.append(education.getContent());
-                    stringHtml.append("</ul>");
+                    stringHtml.append("</span>");
                 });
                 stringHtml.append("</div>");
             }
@@ -162,12 +171,14 @@ public class HtmlService {
             //HTML结尾
             stringHtml.append("</body></html>");
             //将HTML文件内容写入文件中
-            printStream.println(stringHtml.toString());
+            stringHtmlS=stringHtml.toString();
+            stringHtmlS = stringHtmlS.replace("<br>","<br />");
+            printStream.println(stringHtmlS);
         }catch(FileNotFoundException e){
             e.printStackTrace();
         }
         //将HTML的内容返回过去
-        return stringHtml.toString();
+        return stringHtmlS;
     }
 
 }

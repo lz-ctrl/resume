@@ -107,10 +107,14 @@ public class ExperienceService {
      * @param id
      * @return
      */
+    @Transactional(rollbackFor = Exception.class)
     public Integer delete(Integer id){
         if(id==null){
             throw new ServiceException(RestCode.BAD_REQUEST_403);
         }
+        ExperienceAllVo experience=experienceMapper.findById(id);
+        //这里同时删除公司信息
+        companyMapper.deleteById(experience.getCompanyId());
         return experienceMapper.deleteById(id);
     }
 

@@ -28,4 +28,6 @@ public class ExperienceAllVo {
     private Integer userId;
     @ApiModelProperty("所属简历id(新增必传)")
     private Integer resumeId;
+    @ApiModelProperty("公司id")
+    private Integer companyId;
 }

@@ -54,7 +54,7 @@ public class ResumeService {
         return null;
     }
 
-    private final String RESUME_NAME="null_null_个人简历";
+    private final String RESUME_NAME="null_";
 
     /**
      * 新增简历
@@ -85,9 +85,9 @@ public class ResumeService {
         Resume resume=new Resume();
         BeanUtil.copyProperties(resumeDto, resume);
         //如果没有修改简历名称,则自动给他生成简历名称
-        String resumeName=resumeMapper.selectById(resumeDto.getId()).getResumeName();
-        if(resumeDto.getResumeName()==null&&resumeName.equals(RESUME_NAME)){
-            resume.setResumeName(resumeDto.getName()+"_"+resumeDto.getExpect()+"_个人简历");
+        Resume resumeName=resumeMapper.selectById(resumeDto.getId());
+        if(resumeName.getName().contains(RESUME_NAME)){
+            resume.setResumeName(resumeName.getName()+"_"+resumeName.getExpect()+"_个人简历");
         }
         resumeMapper.updateById(resume);
         return resume;

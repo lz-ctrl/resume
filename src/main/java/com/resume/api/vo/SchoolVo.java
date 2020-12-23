@@ -28,4 +28,6 @@ public class SchoolVo {
     private Integer resumeId;
     @ApiModelProperty("学历名称")
     private String studyLevelName;
+    @ApiModelProperty("学历名称")
+    private Integer studyLevelId;
 }

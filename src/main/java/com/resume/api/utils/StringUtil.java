@@ -187,5 +187,8 @@ public class StringUtil {
         return gc.get(2) + 1;
     }
 
-
+    public static void main(String[] args) {
+        String test = "as_null_个人简历";
+        System.out.println(test.contains("null_"));
+    }
 }
